@@ -6,6 +6,9 @@
 Welcome to ASC-bla's documentation!
 ===================================
 
+ASC-bla is a library performing basic linear algebra operations. Classes are **Vector** and **Matrix**
+
+
 .. toctree::
    :maxdepth: 2
    :caption: Contents:
