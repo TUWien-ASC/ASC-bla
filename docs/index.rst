@@ -10,9 +10,15 @@ ASC-bla is a C++ library for basic linear algebra operations.
 
 Installation is via git-clone:
 
+
+..  code-block::
+    
     git clone https://github.com/JSchoeberl/ASC-bla.git
 
+
 To configure and build some tests do
+
+..  code-block::
 
     cd ASC-bla
     mkdir build
@@ -24,8 +30,10 @@ To configure and build some tests do
     
 The library provides template classes **Vector** and **Matrix**.
 
-You can create vectors and compute with vectors like
+You can create vectors and compute with vectors like:
 
+..  code-block:: cpp
+                 
    Vector<double> x(5), y(5), z(5);
    for (int i = 0; i < x.Size(); i++)
       x(i) = i;
