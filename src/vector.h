@@ -1,3 +1,6 @@
+#ifndef FILE_VECTOR_H
+#define FILE_VECTOR_H
+
 #include <iostream>
 
 namespace ASC_bla
@@ -52,6 +55,8 @@ namespace ASC_bla
       ost << ", " << v(i);
     return ost;
   }
-
   
 }
+
+
+#endif
