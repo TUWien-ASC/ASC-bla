@@ -21,7 +21,14 @@ namespace ASC_bla
     {
       *this = v;
     }
-    
+
+    Vector (Vector && v)
+      : size_{0}, data_(nullptr)
+    {
+      std::swap(size_, v.size_);
+      std::swap(data_, v.data_);
+    }
+
     ~Vector () { delete [] data_; }
     
     Vector & operator=(const Vector & v2)
@@ -31,6 +38,13 @@ namespace ASC_bla
       return *this;
     }
 
+    Vector & operator= (Vector && v2)
+    {
+      for (size_t i = 0; i < size_; i++)
+        data_[i] = v2(i);
+      return *this;
+    }
+    
     size_t Size() const { return size_; }
     T & operator()(size_t i) { return data_[i]; }
     const T & operator()(size_t i) const { return data_[i]; }
