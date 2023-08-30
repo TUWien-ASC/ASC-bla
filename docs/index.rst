@@ -13,7 +13,7 @@ Installation is via git-clone:
 
 ..  code-block::
     
-    git clone https://github.com/JSchoeberl/ASC-bla.git
+    git clone https://github.com/TUWien-ASC/ASC-bla.git
 
 
 To configure and build some tests do
