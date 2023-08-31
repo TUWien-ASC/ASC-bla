@@ -7,7 +7,6 @@ include_directories(src)
 
 
 
-
 find_package(Python 3.8 COMPONENTS Interpreter Development REQUIRED)
 
 execute_process(
@@ -18,8 +17,8 @@ find_package(pybind11 CONFIG REQUIRED)
 
 
 add_executable (test_vector tests/test_vector.cc)
-pybind11_add_module(ASC_bla src/pybind.cpp)
+pybind11_add_module(bla src/bind_bla.cpp)
 
 
-install (TARGETS ASC_bla DESTINATION ASC_bla)
+install (TARGETS bla DESTINATION ASCsoft)
 
