@@ -13,8 +13,9 @@ PYBIND11_MODULE(bla, m) {
     m.doc() = "Basic linear algebra module"; // optional module docstring
     
     py::class_<Vector<double>> (m, "Vector")
-      .def(py::init<size_t>())
-      .def("__len__", [](Vector<double> & self) { return self.Size(); },
+      .def(py::init<size_t>(),
+           py::arg("size"), "create vector of given size")
+      .def("__len__", &Vector<double>::Size,
            "return size of vector")
       
       .def("__setitem__", [](Vector<double> & self, size_t i, double v) { self(i) = v; })
