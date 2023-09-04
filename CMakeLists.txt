@@ -6,8 +6,7 @@ set (CMAKE_CXX_STANDARD 17)
 include_directories(src)
 
 
-
-find_package(Python 3.8 COMPONENTS Interpreter Development REQUIRED)
+find_package(Python3 COMPONENTS Interpreter Development REQUIRED)
 
 execute_process(
   COMMAND "${Python_EXECUTABLE}" -m pybind11 --cmakedir
@@ -17,8 +16,10 @@ find_package(pybind11 CONFIG REQUIRED)
 
 
 add_executable (test_vector tests/test_vector.cc)
+
 pybind11_add_module(bla src/bind_bla.cpp)
 
+# target_sources (bla PUBLIC src/vector.h src/expression.h)
 
 install (TARGETS bla DESTINATION ASCsoft)
 
