@@ -6,9 +6,9 @@
 namespace ASC_bla // To avoid name clashes
 {
 
-  template <typename T> // T is a template parameter, in the compiler it is replaced by a type (int, float char...)
-  class Vector
-  {
+template <typename T>   // T is a template parameter, in the compiler it is
+                        // replaced by a type (int, float char...)
+class Vector {
     /*
       This class creates a vector of type T, which is a template parameter.
       size_ is the size of the vector,
@@ -19,66 +19,82 @@ namespace ASC_bla // To avoid name clashes
     T *data_;     // data_ is a member variable
 
   public:
-    Vector(size_t size) // Constructor
-        : size_(size), data_(new T[size])
+    Vector(size_t size)                     // Constructor
+        : size_(size), data_(new T[size])   // here the ":" is used to
+                                            // initialize the member variables
     {
-      ;
+        ;
     }
 
-    Vector (const Vector & v)
-      : Vector(v.Size())
+    Vector(const Vector &v)   // Copy constructor, the const means that the
+                              // object v is not changed and the & means that
+                              // the object is passed by reference
+        : Vector(v.Size())    // here the ":" is used to initialize the member
+                              // variables
     {
-      *this = v;
+        *this = v;   // *this is a pointer to
+                     // the object itself, so
+                     // *this = v means that the
+                     // object is assigned to
+                     // the object v is it
+                     // possible to initializw
+                     // the member using "this =
+                     // &v" ? No because "this"
+                     // is a pointer to the
+                     // object itself, so "this
+                     // = &v" means that the
+                     // pointer is assigned to
+                     // the address of the
+                     // object v
     }
 
-    Vector (Vector && v)
-      : size_{0}, data_(nullptr)
+    Vector(Vector &&v)               // Move constructor
+        : size_{0}, data_(nullptr)   // here the ":" is used to initialize the
+                                     // member variables, the curly brackets are
+                                     // used to initialize the member variables
+                                     // nullptr is a pointer to the address null
     {
-      std::swap(size_, v.size_);
-      std::swap(data_, v.data_);
+        std::swap(size_, v.size_);
+        std::swap(data_, v.data_);
     }
 
-    ~Vector () { delete [] data_; }
-    
-    Vector & operator=(const Vector & v2)
-    {
-      for (size_t i = 0; i < size_; i++)
-        data_[i] = v2(i);
-      return *this;
+    ~Vector() { delete[] data_; }
+
+    Vector &operator=(const Vector &v2) {
+        for (size_t i = 0; i < size_; i++)
+            data_[i] = v2(i);
+        return *this;
     }
 
-    Vector & operator= (Vector && v2)
-    {
-      for (size_t i = 0; i < size_; i++)
-        data_[i] = v2(i);
-      return *this;
+    Vector &operator=(Vector &&v2) {
+        for (size_t i = 0; i < size_; i++)
+            data_[i] = v2(i);
+        return *this;
     }
-    
+
     size_t Size() const { return size_; }
-    T & operator()(size_t i) { return data_[i]; }
-    const T & operator()(size_t i) const { return data_[i]; }
-  };
+    T &operator()(size_t i) { return data_[i]; }
+    const T &operator()(size_t i) const { return data_[i]; }
+};
 
-
-  template <typename T>
-  Vector<T> operator+ (const Vector<T> & a, const Vector<T> & b)
-  {
+template <typename T>
+Vector<T>
+operator+(const Vector<T> &a, const Vector<T> &b) {
     Vector<T> sum(a.Size());
     for (size_t i = 0; i < a.Size(); i++)
-      sum(i) = a(i)+b(i);
+        sum(i) = a(i) + b(i);
     return sum;
-  }
-  
-  template <typename T>
-  std::ostream & operator<< (std::ostream & ost, const Vector<T> & v)
-  {
+}
+
+template <typename T>
+std::ostream &
+operator<<(std::ostream &ost, const Vector<T> &v) {
     if (v.Size() > 0)
-      ost << v(0);
+        ost << v(0);
     for (size_t i = 1; i < v.Size(); i++)
-      ost << ", " << v(i);
+        ost << ", " << v(i);
     return ost;
-  }
-  
+}
 }
 
 #endif
