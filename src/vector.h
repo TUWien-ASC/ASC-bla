@@ -1,21 +1,30 @@
-#ifndef FILE_VECTOR_H
-#define FILE_VECTOR_H
+#ifndef FILE_VECTOR_H // To check if the file has already been included
+#define FILE_VECTOR_H // To mark that the file has now been included
 
-#include <iostream>
+#include <iostream> // For std::ostream
 
-namespace ASC_bla
+namespace ASC_bla // To avoid name clashes
 {
-  
-  template <typename T>
+
+  template <typename T> // T is a template parameter, in the compiler it is replaced by a type (int, float char...)
   class Vector
   {
-    size_t size_;
-    T * data_;
-    
+    /*
+      This class creates a vector of type T, which is a template parameter.
+      size_ is the size of the vector,
+      data_ is a pointer to the first element of the vector.
+    */
+
+    size_t size_; // size_t is a type that is guaranteed to be big enough to hold the size of any object, size_ is a member variable
+    T *data_;     // data_ is a member variable
+
   public:
-    Vector (size_t size) 
-      : size_(size), data_(new T[size]) { ; }
-    
+    Vector(size_t size) // Constructor
+        : size_(size), data_(new T[size])
+    {
+      ;
+    }
+
     Vector (const Vector & v)
       : Vector(v.Size())
     {
