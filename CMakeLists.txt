@@ -7,6 +7,6 @@ include_directories(src)
 
 add_executable (test_vector tests/test_vector.cc)
 
-
+add_test(NAME test_vector COMMAND test_vector)
 
 
