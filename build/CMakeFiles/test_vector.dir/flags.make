@@ -6,5 +6,5 @@ CXX_DEFINES =
 
 CXX_INCLUDES = -I"/home/ebonetti/Desktop/Introduction to Scientific Computing/ASC-bla/src"
 
-CXX_FLAGS = -std=gnu++11
+CXX_FLAGS = -O3 -Wall -Wextra -std=gnu++11
 

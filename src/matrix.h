@@ -1,6 +1,8 @@
 #ifndef FILE_MATRIX_H
 #define FILE_MATRIX_H
 
+#include <iostream>
+
 #include "vector.h"   // Include the vector header file
 
 namespace ASC_bla {
@@ -78,6 +80,18 @@ class Matrix {
 
     const T &operator()(size_t i, size_t j) const {
         return data_[i + cols_ * j];
+    }
+
+    // Transpose
+    Matrix Transpose() const {
+        Matrix result(cols_, rows_);
+        for (size_t i = 0; i < rows_; i++) {
+            for (size_t j = 0; j < cols_; j++) {
+                result(j, i) = data_[i + cols_ * j];
+            }
+        }
+
+        return result;
     }
 };
 
