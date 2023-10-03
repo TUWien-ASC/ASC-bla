@@ -79,6 +79,7 @@ You can extract a rows or a columns from a matrix:
    Vector col1 = product.Col(1);
 
 
+some changes ...  
 
    
 .. toctree::
