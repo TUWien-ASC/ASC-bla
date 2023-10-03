@@ -5,7 +5,8 @@ set (CMAKE_CXX_STANDARD 11)
 
 include_directories(src)
 
-add_executable (test_vector tests/test_vector.cc)
+add_subdirectory (tests)
+
 
 
 
