@@ -35,8 +35,8 @@ class Matrix {
         return *this;
     }
     Matrix &operator=(Matrix &&m2) {
-        for (size_t i = 0; i < cols_ * rows_; i++) data_[i] = m2(i);
-        return *this;
+      for (size_t i = 0; i < cols_ * rows_; i++) data_[i] = m2(i);
+      return *this;
     }
 
     size_t SizeRows() const { return rows_; }

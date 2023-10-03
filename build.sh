@@ -1,5 +1,5 @@
 # to allow execution: chmod +x build.sh
-# to run: ./build
+# to run: ./build.sh
 
 
 #!/bin/bash
