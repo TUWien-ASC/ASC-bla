@@ -1,0 +1,1 @@
+/usr/bin/g++-12 -O3 -Wall -Wextra -g CMakeFiles/test_vector.dir/tests/test_vector.cc.o -o test_vector 
