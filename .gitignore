@@ -57,3 +57,18 @@ include/divisible/*
 .idea/*.xml
 
 build/**/*
+
+
+
+## Python
+
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+*.egg-info/
+.installed.cfg
+*.egg
+.ipynb_checkpoints
+
