@@ -4,6 +4,7 @@
 #include <iostream>
 
 #include "shape.h"
+#include "vector.h"
 
 namespace bla
 {
@@ -83,8 +84,7 @@ namespace bla
     };
 
     template <typename T, ORDERING ORDA, ORDERING ORDB>
-    Matrix<T, ORDA>
-    operator+(const Matrix<T, ORDA> &a, const Matrix<T, ORDB> &b)
+    Matrix<T, ORDA> operator+(const Matrix<T, ORDA> &a, const Matrix<T, ORDB> &b)
     {
         Matrix<T, ORDA> sum(a.NumRows(), a.NumCols());
         for (size_t i = 0; i < a.NumRows(); i++)
@@ -93,9 +93,49 @@ namespace bla
         return sum; // sum is stored as ORDA
     }
 
+    template <typename T, ORDERING ORDA, ORDERING ORDB>
+    Matrix<T, ORDA> operator*(const Matrix<T, ORDA> &a, const Matrix<T, ORDB> &b)
+    {
+        Matrix<T, ORDA> res(a.NumRows(), b.NumCols());
+        for (size_t i = 0; i < res.NumRows(); i++)
+        {
+            for (size_t j = 0; j < res.NumCols(); j++)
+            {
+                T sum = 0;
+                for (size_t k = 0l; k < res.NumCols(); k++)
+                {
+                    sum += a(i, k) * b(k, j);
+                }
+                res(i, j) = sum;
+            }
+        }
+        return res; // result is stored as ORDA
+    }
+
     template <typename T, ORDERING ORD>
-    std::ostream &
-    operator<<(std::ostream &ost, const Matrix<T, ORD> &m)
+    Vector<T> operator*(const Matrix<T, ORD> &a, const Vector<T> &b)
+    {
+        Vector<T> res(a.NumRows());
+        for (size_t i = 0; i < a.NumRows(); i++)
+        {
+            T sum = 0;
+            for (size_t j = 0; j < a.NumCols(); j++)
+            {
+                sum += a(i, j) * b(j);
+            }
+            res(i) = sum;
+        }
+        return res;
+    }
+
+    template <typename T, ORDERING ORD>
+    Vector<T> operator*(const Vector<T> &b, const Matrix<T, ORD> &a)
+    {
+        return a * b
+    }
+
+    template <typename T, ORDERING ORD>
+    std::ostream &operator<<(std::ostream &ost, const Matrix<T, ORD> &m)
     {
         for (size_t i = 0; i < m.NumRows(); i++)
         {
