@@ -2,17 +2,16 @@
 
 #include <iostream>
 
-namespace bla = ASC_bla;
-
-int
-main()
+int main()
 {
     size_t m = 5;
     size_t n = 4;
     bla::Matrix<double> A(m, n), B(m, n);
 
-    for (size_t i = 0; i < A.NumRows(); i++) {
-        for (size_t j = 0; j < A.NumCols(); j++) {
+    for (size_t i = 0; i < A.NumRows(); i++)
+    {
+        for (size_t j = 0; j < A.NumCols(); j++)
+        {
             A(i, j) = i + j;
             B(i, j) = i * j;
         }

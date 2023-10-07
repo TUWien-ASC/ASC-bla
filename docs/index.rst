@@ -34,17 +34,11 @@ To use ASC-bla in your code, set the compiler include path properly, and include
     #include <vector.h>
     #include <matrix.h>
 
-All objects are implemented in the namespace ASC_bla. To use them with less typing, you can set
+All objects are implemented in the namespace bla. To use them with less typing, you can set
 
 ..  code-block::
     
-    namespace bla = ASC_bla;
-
-or even
-
-..  code-block::
-    
-    using namespace ASC_bla;
+    using namespace bla;
 
     
 

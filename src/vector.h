@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-namespace ASC_bla
+namespace bla
 {
 
 	template <typename T>
