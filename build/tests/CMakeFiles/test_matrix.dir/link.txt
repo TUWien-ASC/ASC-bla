@@ -1,1 +1,1 @@
-/usr/bin/c++ CMakeFiles/test_matrix.dir/test_matrix.cc.o -o test_matrix 
+/usr/bin/c++ -g CMakeFiles/test_matrix.dir/test_matrix.cc.o -o test_matrix 
