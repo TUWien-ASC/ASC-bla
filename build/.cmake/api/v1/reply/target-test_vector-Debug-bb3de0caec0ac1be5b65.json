@@ -47,9 +47,6 @@
 			[
 				{
 					"fragment" : "-g"
-				},
-				{
-					"fragment" : "-std=gnu++11"
 				}
 			],
 			"includes" : 
@@ -66,7 +63,7 @@
 				[
 					1
 				],
-				"standard" : "11"
+				"standard" : "17;-Wall"
 			},
 			"sourceIndexes" : 
 			[

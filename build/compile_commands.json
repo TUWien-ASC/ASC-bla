@@ -1,12 +1,12 @@
 [
 {
   "directory": "/home/ebonetti/Desktop/IntoToSciCom/ASC-bla/build/tests",
-  "command": "/usr/bin/c++  -I/home/ebonetti/Desktop/IntoToSciCom/ASC-bla/src -g -std=gnu++11 -o CMakeFiles/test_vector.dir/test_vector.cc.o -c /home/ebonetti/Desktop/IntoToSciCom/ASC-bla/tests/test_vector.cc",
+  "command": "/usr/bin/c++  -I/home/ebonetti/Desktop/IntoToSciCom/ASC-bla/src -g -o CMakeFiles/test_vector.dir/test_vector.cc.o -c /home/ebonetti/Desktop/IntoToSciCom/ASC-bla/tests/test_vector.cc",
   "file": "/home/ebonetti/Desktop/IntoToSciCom/ASC-bla/tests/test_vector.cc"
 },
 {
   "directory": "/home/ebonetti/Desktop/IntoToSciCom/ASC-bla/build/tests",
-  "command": "/usr/bin/c++  -I/home/ebonetti/Desktop/IntoToSciCom/ASC-bla/src -g -std=gnu++11 -o CMakeFiles/test_matrix.dir/test_matrix.cc.o -c /home/ebonetti/Desktop/IntoToSciCom/ASC-bla/tests/test_matrix.cc",
+  "command": "/usr/bin/c++  -I/home/ebonetti/Desktop/IntoToSciCom/ASC-bla/src -g -o CMakeFiles/test_matrix.dir/test_matrix.cc.o -c /home/ebonetti/Desktop/IntoToSciCom/ASC-bla/tests/test_matrix.cc",
   "file": "/home/ebonetti/Desktop/IntoToSciCom/ASC-bla/tests/test_matrix.cc"
 }
 ]

@@ -5,20 +5,27 @@
 namespace bla = ASC_bla;
 
 int main() {
-  size_t n = 3;
+  size_t n = 2;
+
+  std::cout << "test default constructor" << std::endl;
   bla::Matrix<double, bla::RowMajor> x(n, n);
+  bla::Matrix<double, bla::RowMajor> y(n, n);
+
   for (size_t i = 0; i < n; i++) {
     for (size_t j = 0; j < n; j++) {
       x(i, j) = i * n + j + 1;
+      y(i, j) = i * n + j + 1;
     }
   }
-  x(2, 2) = 10;
 
-  std::cout << "x = " << x << std::endl;
-  x.Transpose();
-  std::cout << "x.Transpose() = " << x << std::endl;
-  // std::cout << "x.GaussJordan() = " << x.GaussJordan() << std::endl;
+  std::cout << x << std::endl;
 
-  x(0, 2) = x(0, 2) / 3;
-  std::cout << "x = " << x << std::endl;
+  // Test gaussian elimination
+  std::cout << "test gaussian elimination" << std::endl;
+  // std::cout << x << std::endl;
+  y = x.GaussJordan();
+  std::cout << y << std::endl;
+
+  std::cout << x << std::endl;
+  std::cout << x * y << std::endl;
 }
