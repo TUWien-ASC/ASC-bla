@@ -39,7 +39,7 @@ namespace ASC_bla
         data_[dist_*i] = scal;
       return *this;
     }
-    
+
     auto View() const { return VectorView(size_, dist_, data_); }
     size_t Size() const { return size_; }
     T & operator()(size_t i) { return data_[dist_*i]; }
