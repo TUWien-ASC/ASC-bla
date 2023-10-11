@@ -182,8 +182,8 @@ tests/CMakeFiles/test_matrix.dir/test_matrix.cc.o: ../tests/test_matrix.cc \
   /usr/include/c++/11/bits/ostream.tcc \
   /usr/include/c++/11/istream \
   /usr/include/c++/11/bits/istream.tcc \
-  ../src/vector.h \
-  ../src/expression.h
+  ../src/expression.h \
+  ../src/vector.h
 
 
 /usr/include/c++/11/bits/istream.tcc:
