@@ -12,7 +12,6 @@ namespace ASC_bla
     auto Upcast() const { return static_cast<const T&> (*this); }
     size_t Size() const { return Upcast().Size(); }
     auto operator() (size_t i) const { return Upcast()(i); }
-    auto & operator() (size_t i) { return  Upcast()(i); }
   };
   
  
@@ -55,6 +54,18 @@ namespace ASC_bla
     return ScaleVecExpr(scal, v.Upcast());
   }
 
+
+
+  template <typename T>
+  std::ostream & operator<< (std::ostream & ost, const VecExpr<T> & v)
+  {
+    if (v.Size() > 0)
+      ost << v(0);
+    for (size_t i = 1; i < v.Size(); i++)
+      ost << ", " << v(i);
+    return ost;
+  }
+  
 }
  
 #endif
