@@ -46,7 +46,7 @@ namespace ASC_bla
     const T & operator()(size_t i) const { return data_[dist_*i]; }
     
     auto Range(size_t first, size_t next) const {
-      return VectorView(next-first, dist_, data_+first);
+      return VectorView(next-first, dist_, data_+first*dist_);
     }
 
     auto Slice(size_t first, size_t slice) const {

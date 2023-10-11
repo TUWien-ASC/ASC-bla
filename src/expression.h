@@ -9,10 +9,10 @@ namespace ASC_bla
   class VecExpr
   {
   public:
-    auto View() const { return static_cast<const T&> (*this); }
-    size_t Size() const { return View().Size(); }
-    auto operator() (size_t i) const { return View()(i); }
-    auto & operator() (size_t i) { return  View()(i); }
+    auto Upcast() const { return static_cast<const T&> (*this); }
+    size_t Size() const { return Upcast().Size(); }
+    auto operator() (size_t i) const { return Upcast()(i); }
+    auto & operator() (size_t i) { return  Upcast()(i); }
   };
   
  
@@ -23,7 +23,6 @@ namespace ASC_bla
     TB b_;
   public:
     SumVecExpr (TA a, TB b) : a_(a), b_(b) { }
-    auto View () { return SumExpr(a_, b_); }
 
     auto operator() (size_t i) const { return a_(i)+b_(i); }
     size_t Size() const { return a_.Size(); }      
@@ -32,7 +31,7 @@ namespace ASC_bla
   template <typename TA, typename TB>
   auto operator+ (const VecExpr<TA> & a, const VecExpr<TB> & b)
   {
-    return SumVecExpr(a.View(), b.View());
+    return SumVecExpr(a.Upcast(), b.Upcast());
   }
 
 
@@ -45,7 +44,6 @@ namespace ASC_bla
     TV vec_;
   public:
     ScaleVecExpr (TSCAL scal, TV vec) : scal_(scal), vec_(vec) { }
-    auto View () { return ScalVecExpr(scal_, vec_); }
 
     auto operator() (size_t i) const { return scal_*vec_(i); }
     size_t Size() const { return vec_.Size(); }      
@@ -54,7 +52,7 @@ namespace ASC_bla
   template <typename T>
   auto operator* (double scal, const VecExpr<T> & v)
   {
-    return ScaleVecExpr(scal, v.View());
+    return ScaleVecExpr(scal, v.Upcast());
   }
 
 }
