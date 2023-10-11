@@ -37,7 +37,11 @@ class Matrix {
   }
 
   // Destructor
-  ~Matrix() { delete[] data_; }
+  ~Matrix() {
+    std::cout << "destructor called" << std::endl;
+    delete[] data_;
+    std::cout << "destructor finished" << std::endl;
+  }
 
   // Copy assignment operator
   Matrix &operator=(const Matrix &m2) {
@@ -61,18 +65,20 @@ class Matrix {
   size_t SizeRows() const { return rows_; }
   size_t SizeCols() const { return cols_; }
 
-  //
+  // Matrix-vector multiplication
   Vector<T> operator*(const Vector<T> &v) const {
     Vector<T> result(rows_);
+
     for (size_t i = 0; i < rows_; i++) {
+      result(i) = 0;
       for (size_t j = 0; j < cols_; j++) {
         result(i) += *this(i, j) * v(j);
       }
     }
     return result;
   }
-  //
-  //  // Addition of matrices
+
+  // Addition of matrices
   Matrix operator+(const Matrix &m) const {
     Matrix result(rows_, cols_);
     for (size_t i = 0; i < rows_; i++) {
@@ -83,7 +89,7 @@ class Matrix {
 
     return result;
   }
-  //  // multiplication of matrices
+  // multiplication of matrices
   Matrix operator*(const Matrix &m) const {
     Matrix result(rows_, m.SizeCols());
     for (size_t i = 0; i < rows_; i++) {
@@ -91,22 +97,19 @@ class Matrix {
         result(i, j) = 0;
       }
     }
-    std::cout << "result = " << std::endl;
-    std::cout << result << std::endl;
+
     for (size_t i = 0; i < rows_; i++) {
       for (size_t j = 0; j < m.SizeCols(); j++) {
         for (size_t k = 0; k < cols_; k++) {
           result(i, j) = result(i, j) + (*this)(i, k) * m(k, j);
         }
-        std::cout << "result(" << i << ", " << j << ") = " << result(i, j)
-                  << std::endl;
       }
     }
 
     return result;
   }
-  //
-  //  // operator () for element access
+
+  // operator () for element access
   T &operator()(size_t i, size_t j) {
     if (ORD == ColMajor) {
       return data_[i + cols_ * j];
@@ -138,11 +141,16 @@ class Matrix {
     for (size_t i = 0; i < this->SizeRows(); i++) {
       eye(i, i) = 1;
     }
-    Matrix<T, ORD> result(*this);
-    std::cout << "result = " << std::endl;
-    std::cout << eye << std::endl;
-    std::cout << result << std::endl;
+    // Matrix<T, ORD> result(*this);
+    Matrix<T, ORD> result(this->rows_, this->cols_);
+    for (size_t i = 0; i < this->SizeRows(); i++) {
+      for (size_t j = 0; j < this->SizeCols(); j++) {
+        result(i, j) = this->operator()(i, j);
+      }
+    }
 
+    // std::cout << result << std::endl;
+    // std::cout << eye << std::endl;
     for (int i = 0; i < eye.SizeRows(); i++) {
       std::cout << "step i = " << i << std::endl;
       T pivot = result(i, i);
@@ -162,8 +170,11 @@ class Matrix {
           }
         }
       }
+      // std::cout << result << std::endl;
+      // std::cout << eye << std::endl;
     }
-
+    // std::cout << "ionveerse is = " << std::endl;
+    // std::cout << eye << std::endl;
     return eye;
   };
 };
