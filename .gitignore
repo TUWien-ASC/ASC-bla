@@ -32,7 +32,6 @@
 !.readthedocs.yml
 
 
-
 # don't ignore build.sh file
 !build.sh
 
