@@ -6,33 +6,26 @@ namespace bla = ASC_bla;
 
 int main() {
   size_t n = 10;
-  {
-    bla::Matrix<long unsigned int, bla::ColMajor> x(n, n);
-    bla::Matrix<long unsigned int, bla::ColMajor> y(n, n);
-    //
-    for (size_t i = 0; i < n; i++) {
-      x(i, i) = 2;
-      x(i, i + 1) = 1;
-      x(i + 1, i) = 1;
+  bla::Matrix<double, bla::ColMajor> x(n, n), y(n, n);
+
+  for (size_t i = 0; i < x.SizeCols(); i++) {
+    for (size_t j = 0; j < x.SizeRows(); j++) {
+      x(i, j) = i;
+      y(i, j) = 10;
     }
-
-    std::cout << "print initial matrix" << std::endl;
-    std::cout << x << std::endl;
-
-    // Test gaussian elimination
-    std::cout << "test gaussian elimination" << std::endl;
-    y = x.GaussJordan();
-    std::cout << "print inv" << std::endl;
-
-    std::cout << y << std::endl;
-
-    std::cout << "print orig" << std::endl;
-
-    std::cout << x << std::endl;
-    std::cout << "print prod" << std::endl;
-
-    std::cout << x * y << std::endl;
   }
-  std::cout << "fine" << std::endl;
-  return 0;
+
+  bla::Matrix<double, bla::ColMajor> z = x + y;
+
+  std::cout << "x+y = " << z << std::endl;
+  //
+  std::cout << "type of (x+3*y) is  " << typeid(x + 3 * y).name() << std::endl;
+
+  z = x + 3 * y;
+  std::cout << "type of (x+3*y) is  " << z << std::endl;
+  //
+  //// x.Range(2, 9) = 3;
+  //// x.Slice(1, 5) = 10;
+  //
+  std::cout << "x = " << x << std::endl;
 }
