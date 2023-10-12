@@ -26,15 +26,35 @@ class MatrixView : public MatExpr<MatrixView<T, ORD>> {
       dist_ = rows;
     }
   }
-
-  // Copy assignment operator, needs to be modified for row maj
-  template <typename TB>
-  MatrixView& operator=(const MatExpr<TB>& m2) {
+  /*
+  MatrixView& operator=(const MatrixView& m2) {
     for (size_t i = 0; i < rows_; i++) {
       for (size_t j = 0; j < cols_; j++) {
         (*this)(i, j) = m2(i, j);
       }
     }
+    std::cout << "matirx view operator= defaultcalled" << std::endl;
+    return *this;
+  }
+  */
+  MatrixView& operator=(const MatrixView& m2) {
+    std::cout << "matirx view operator= defaultcalled!!!!!!" << std::endl;
+    *this = static_cast<const MatExpr<MatrixView<T, ORD>>&>(m2);
+    return *this;
+  }
+  // Copy assignment operator, needs to be modified for row maj
+  template <typename TB>
+  MatrixView& operator=(const MatExpr<TB>& m2) {
+    std::cout << "matirx view operator= MatExpr called 1" << std::endl;
+    std::cout << "rows and cols" << rows_ << cols_ << std::endl;
+    std::cout << "rows and cols" << m2.SizeRows() << m2.SizeCols() << std::endl;
+    for (size_t i = 0; i < rows_; i++) {
+      for (size_t j = 0; j < cols_; j++) {
+        (*this)(i, j) = m2(i, j);
+        // m2(i, j);
+      }
+    }
+    std::cout << "matirx view operator= MatExpr called2" << std::endl;
     return *this;
   }
 
@@ -129,6 +149,8 @@ class Matrix : public MatrixView<T, ORD> {
         }
       }
     }
+    std::cout << "matirx view operator= reference called" << std::endl;
+
     return *this;
   }
 
@@ -140,6 +162,8 @@ class Matrix : public MatrixView<T, ORD> {
         }
       }
     }
+    std::cout << "matirx view operator= R-refer called" << std::endl;
+
     return *this;
   };
 };

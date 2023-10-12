@@ -42,8 +42,11 @@ int main() {
   std::cout << "x = " << x << std::endl;
   // std::cout << "x.Transpose()= " << Transpose(x) << std::endl;
   std::cout << "x.Transpose()= " << Transpose(x) << std::endl;
+  std::cout << "call transpose" << std::endl;
 
   w = Transpose(x);
-  // test x.Row(0)
-  std::cout << "x.Row(0) = " << x.Row(0) << std::endl;
+  std::cout << "transpose is back" << std::endl;
+
+  //  test x.Row(0)
+  std::cout << "x.Row(0) = " << x.Row(0) << w.Row(0) << std::endl;
 }
