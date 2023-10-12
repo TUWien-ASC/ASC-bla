@@ -9,10 +9,10 @@ namespace ASC_bla
   class VecExpr
   {
   public:
-    auto View() const { return static_cast<const T&> (*this); }
-    size_t Size() const { return View().Size(); }
-    auto operator() (size_t i) const { return View()(i); }
-    auto & operator() (size_t i) { return  View()(i); }
+   auto Upcast() const { return static_cast<const T&>(*this); }
+   size_t Size() const { return Upcast().Size(); }
+   auto operator()(size_t i) const { return Upcast()(i); }
+   auto& operator()(size_t i) { return Upcast()(i); }
   };
   
  
@@ -23,7 +23,7 @@ namespace ASC_bla
     TB b_;
   public:
     SumVecExpr (TA a, TB b) : a_(a), b_(b) { }
-    auto View () { return SumExpr(a_, b_); }
+    auto Upcast() { return SumExpr(a_, b_); }
 
     auto operator() (size_t i) const { return a_(i)+b_(i); }
     size_t Size() const { return a_.Size(); }      
@@ -32,7 +32,7 @@ namespace ASC_bla
   template <typename TA, typename TB>
   auto operator+ (const VecExpr<TA> & a, const VecExpr<TB> & b)
   {
-    return SumVecExpr(a.View(), b.View());
+    return SumVecExpr(a.Upcast(), b.Upcast());
   }
 
   template <typename TSCAL, typename TV>
@@ -41,7 +41,7 @@ namespace ASC_bla
     TV vec_;
   public:
     ScaleVecExpr (TSCAL scal, TV vec) : scal_(scal), vec_(vec) { }
-    auto View () { return ScalVecExpr(scal_, vec_); }
+    auto Upcast() { return ScalVecExpr(scal_, vec_); }
 
     auto operator() (size_t i) const { return scal_*vec_(i); }
     size_t Size() const { return vec_.Size(); }
@@ -50,7 +50,7 @@ namespace ASC_bla
   template <typename T>
   auto operator* (double scal, const VecExpr<T> & v)
   {
-    return ScaleVecExpr(scal, v.View());
+    return ScaleVecExpr(scal, v.Upcast());
   }
 
   /****************************************************************/
@@ -60,11 +60,11 @@ namespace ASC_bla
   template <typename T, ORDERING ORD>
   class MatExpr {
    public:
-    auto View() const { return static_cast<const T&>(*this); }
-    size_t SizeCols() const { return View().SizeCols(); }
-    size_t SizeRows() const { return View().SizeRows(); }
-    auto operator()(size_t i, size_t j) const { return View()(i, j); }
-    auto& operator()(size_t i, size_t j) { return View()(i, j); }
+    auto Upcast() const { return static_cast<const T&>(*this); }
+    size_t SizeCols() const { return Upcast().SizeCols(); }
+    size_t SizeRows() const { return Upcast().SizeRows(); }
+    auto operator()(size_t i, size_t j) const { return Upcast()(i, j); }
+    auto& operator()(size_t i, size_t j) { return Upcast()(i, j); }
   };
 
   template <typename TA, typename TB, ORDERING ORD>
@@ -74,7 +74,7 @@ namespace ASC_bla
 
    public:
     SumMatExpr(TA a, TB b) : a_(a), b_(b) {}
-    auto View() { return SumExpr(a_, b_); }
+    auto Upcast() { return SumExpr(a_, b_); }
 
     auto operator()(size_t i, size_t j) const { return a_(i, j) + b_(i, j); }
     size_t SizeCols() const { return a_.SizeCols(); }
@@ -83,9 +83,9 @@ namespace ASC_bla
 
   template <typename TA, typename TB, ORDERING ORD>
   auto operator+(const MatExpr<TA, ORD>& a, const MatExpr<TB, ORD>& b) {
-    return SumMatExpr<TA, TB, ORD>{a.View(), b.View()};
+    return SumMatExpr<TA, TB, ORD>{a.Upcast(), b.Upcast()};
     // why not
-    // return SumMatExpr(a.View(), b.View());
+    // return SumMatExpr(a.Upcast(), b.Upcast());
   }
 
   template <typename TSCAL, typename TM, ORDERING ORD>
@@ -95,7 +95,7 @@ namespace ASC_bla
 
    public:
     ScaleMatExpr(TSCAL scal, TM mat) : scal_(scal), mat_(mat) {}
-    auto View() { return ScalMatExpr(scal_, mat_); }
+    auto Upcast() { return ScalMatExpr(scal_, mat_); }
 
     auto operator()(size_t i, size_t j) const { return scal_ * mat_(i, j); }
     size_t SizeCols() const { return mat_.SizeCols(); }
@@ -104,9 +104,9 @@ namespace ASC_bla
 
   template <typename T, ORDERING ORD>
   auto operator*(double scal, const MatExpr<T, ORD>& m) {
-    return ScaleMatExpr<double, T, ORD>(scal, m.View());
+    return ScaleMatExpr<double, T, ORD>(scal, m.Upcast());
     // Why not ?
-    //    return ScaleMatExpr(scal, m.View());
+    //    return ScaleMatExpr(scal, m.Upcast());
   }
 }
  
