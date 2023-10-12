@@ -56,8 +56,8 @@ namespace ASC_bla
   /****************************************************************/
   /*         My implementation of the matrix class                */
   /****************************************************************/
-  enum ORDERING { RowMajor, ColMajor };
-  template <typename T, ORDERING ORD>
+
+  template <typename T>
   class MatExpr {
    public:
     auto Upcast() const { return static_cast<const T&>(*this); }
@@ -67,8 +67,8 @@ namespace ASC_bla
     auto& operator()(size_t i, size_t j) { return Upcast()(i, j); }
   };
 
-  template <typename TA, typename TB, ORDERING ORD>
-  class SumMatExpr : public MatExpr<SumMatExpr<TA, TB, ORD>, ORD> {
+  template <typename TA, typename TB>
+  class SumMatExpr : public MatExpr<SumMatExpr<TA, TB>> {
     TA a_;
     TB b_;
 
@@ -81,15 +81,15 @@ namespace ASC_bla
     size_t SizeRows() const { return a_.SizeRows(); }
   };
 
-  template <typename TA, typename TB, ORDERING ORD>
-  auto operator+(const MatExpr<TA, ORD>& a, const MatExpr<TB, ORD>& b) {
-    return SumMatExpr<TA, TB, ORD>{a.Upcast(), b.Upcast()};
+  template <typename TA, typename TB>
+  auto operator+(const MatExpr<TA>& a, const MatExpr<TB>& b) {
+    return SumMatExpr<TA, TB>{a.Upcast(), b.Upcast()};
     // why not
     // return SumMatExpr(a.Upcast(), b.Upcast());
   }
 
-  template <typename TSCAL, typename TM, ORDERING ORD>
-  class ScaleMatExpr : public MatExpr<ScaleMatExpr<TSCAL, TM, ORD>, ORD> {
+  template <typename TSCAL, typename TM>
+  class ScaleMatExpr : public MatExpr<ScaleMatExpr<TSCAL, TM>> {
     TSCAL scal_;
     TM mat_;
 
@@ -102,11 +102,29 @@ namespace ASC_bla
     size_t SizeRows() const { return mat_.SizeRows(); }
   };
 
-  template <typename T, ORDERING ORD>
-  auto operator*(double scal, const MatExpr<T, ORD>& m) {
-    return ScaleMatExpr<double, T, ORD>(scal, m.Upcast());
+  template <typename T>
+  auto operator*(double scal, const MatExpr<T>& m) {
+    return ScaleMatExpr<double, T>(scal, m.Upcast());
     // Why not ?
     //    return ScaleMatExpr(scal, m.Upcast());
+  }
+
+  template <typename T>
+  std::ostream& operator<<(std::ostream& ost, const VecExpr<T>& v) {
+    if (v.Size() > 0) ost << v(0);
+    for (size_t i = 1; i < v.Size(); i++) ost << ", " << v(i);
+    return ost;
+  }
+
+  template <typename T>
+  std::ostream& operator<<(std::ostream& ost, const MatExpr<T>& m) {
+    for (size_t i = 0; i < m.SizeRows(); i++) {
+      for (size_t j = 0; j < m.SizeCols(); j++) {
+        ost << m(i, j) << " ";
+      }
+      ost << std::endl;
+    }
+    return ost;
   }
 }
  
