@@ -7,46 +7,72 @@
 #include "vector.h"
 
 namespace ASC_bla {
-
-template <typename T, ORDERING ORD,
-          typename TDIST = std::integral_constant<size_t, 1>>
-class MatrixView : public MatExpr<MatrixView<T, ORD, TDIST>, ORD> {
+enum ORDERING { RowMajor, ColMajor };
+template <typename T, ORDERING ORD>
+class MatrixView : public MatExpr<MatrixView<T, ORD>> {
  protected:
   T* data_;
   size_t cols_;
   size_t rows_;
-  TDIST dist_;
+  size_t dist_;
 
  public:
+  // Constructor
   MatrixView(size_t rows, size_t cols, T* data)
-      : data_(data), rows_(rows), cols_(cols) {}
+      : data_(data), rows_(rows), cols_(cols) {
+    if (ORD == ColMajor) {
+      dist_ = cols;
+    } else {
+      dist_ = rows;
+    }
+  }
 
-  MatrixView(size_t rows, size_t cols, TDIST dist, T* data)
-      : data_(data), rows_(rows), cols_(cols), dist_(dist) {}
-
+  // Copy assignment operator, needs to be modified for row maj
   template <typename TB>
-  MatrixView& operator=(const MatExpr<TB, ORD>& m2) {
+  MatrixView& operator=(const MatExpr<TB>& m2) {
     for (size_t i = 0; i < rows_; i++) {
-      for (size_t j = 0; j < rows_; j++) {
-        data_[dist_ * i + j] = m2(i, j);
+      for (size_t j = 0; j < cols_; j++) {
+        (*this)(i, j) = m2(i, j);
       }
     }
     return *this;
   }
 
   MatrixView& operator=(T scal) {
-    for (size_t i = 0; i < cols_ * rows_; i++) data_[dist_ * i] = scal;
+    for (size_t i = 0; i < rows_; i++) {
+      for (size_t j = 0; j < cols_; j++) {
+        // data_[dist_ * i + j] = scal;
+        (*this)(i, j) = scal;
+      }
+    }
     return *this;
   }
 
   auto View() const { return MatrixView(rows_, cols_, dist_, data_); }
   size_t SizeCols() const { return cols_; }
   size_t SizeRows() const { return rows_; }
-  T& operator()(size_t i, size_t j) { return data_[dist_ * i + j]; }
-  const T& operator()(size_t i, size_t j) const { return data_[dist_ * i + j]; }
+  T* Data() const { return data_; }
+  T& operator()(size_t i, size_t j) {
+    if (ORD == RowMajor) {
+      return data_[dist_ * i + j];
+    } else {
+      return data_[dist_ * j + i];
+    }
+  }
+  const T& operator()(size_t i, size_t j) const {
+    if (ORD == RowMajor) {
+      return data_[dist_ * i + j];
+    } else {
+      return data_[dist_ * j + i];
+    }
+  }
 
   auto Row(size_t i) const {
-    return VectorView<T, size_t>(cols_, dist_, data_ + i * dist_);
+    if constexpr (ORD == RowMajor) {
+      return VectorView<T>(cols_, data_ + i * dist_);
+    } else {
+      return VectorView<T, size_t>(cols_, dist_, data_ + i);
+    }
   }
 
   auto Col(size_t i) const {
@@ -60,37 +86,6 @@ class MatrixView : public MatExpr<MatrixView<T, ORD, TDIST>, ORD> {
   auto Cols(size_t first, size_t next) const {
     return MatrixView(rows_, next - first, dist_, data_ + first);
   }
-
-  auto Transpose() const { return MatrixView(cols_, rows_, dist_, data_); }
-
-  /*auto Inverse() const {
-  MatrixView<T, size_t> eye(rows_, cols_, 1, data_);
-  MatrixView<T, size_t> result(rows_, cols_, 1, data_);
-  for (size_t i = 0; i < rows_; i++) {
-    eye(i, i) = 1;
-  }
-
-  for (size_t i = 0; i < rows_; i++) {
-    T pivot = result(i, i);
-
-    // Make pivot element 1
-    for (size_t j = 0; j < cols_; j++) {
-      eye(i, j) = eye(i, j) / pivot;
-      result(i, j) = result(i, j) / pivot;
-    }
-
-    for (size_t k = 0; k < rows_; k++) {
-      if (k != i) {
-        T factor = result(k, i);
-        for (size_t j = 0; j < cols_; j++) {
-          eye(k, j) = eye(k, j) - factor * eye(i, j);
-          result(k, j) = result(k, j) - factor * result(i, j);
-        }
-      }
-    }
-  }
-  return eye;
-}*/
 };
 
 template <typename T, ORDERING ORD>
@@ -115,11 +110,15 @@ class Matrix : public MatrixView<T, ORD> {
   }
 
   template <typename TB>
-  Matrix(const MatExpr<TB, ORD>& m) : Matrix(m.SizeCols(), m.SizeRows()) {
+  Matrix(const MatExpr<TB>& m) : Matrix(m.SizeCols(), m.SizeRows()) {
     *this = m;
   }
 
-  ~Matrix() { delete[] data_; }
+  ~Matrix() {
+    std::cout << "destructor called" << std::endl;
+    delete[] data_;
+    std::cout << "destructor finished" << std::endl;
+  }
 
   using BASE::operator=;
   Matrix& operator=(const Matrix& m2) {
@@ -158,6 +157,47 @@ std::ostream& operator<<(std::ostream& os, const Matrix<T, ORD>& m) {
   }
   return os;
 }
+
+constexpr ORDERING operator!(ORDERING ordering) {
+  return ordering == ColMajor ? RowMajor : ColMajor;
+}
+
+template <typename T, ORDERING ORD>
+// MatrixView<T, !ORD> Transpose(const Matrix<T, ORD>& m) {
+auto Transpose(const Matrix<T, ORD>& m) {
+  return MatrixView<T, !ORD>(m.SizeCols(), m.SizeRows(), m.Data());
+}
+
+/*
+template <typename T, ORDERING ORD>
+auto Inverse(const Matrix<T, ORD>& m) {
+  MatrixView<T, ORD> eye(m.SizeRows(), m.SizeCols()) = 0;
+  for (size_t i = 0; i < m.SizeRows(); i++) {
+    eye(i, i) = 1;
+  }
+
+  for (size_t i = 0; i < eye.SizeRows(); i++) {
+    T pivot = result(i, i);
+
+    // Make pivot element 1
+    for (size_t j = 0; j < cols_; j++) {
+      eye(i, j) = eye(i, j) / pivot;
+      result(i, j) = result(i, j) / pivot;
+    }
+
+    for (size_t k = 0; k < rows_; k++) {
+      if (k != i) {
+        T factor = result(k, i);
+        for (size_t j = 0; j < cols_; j++) {
+          eye(k, j) = eye(k, j) - factor * eye(i, j);
+          result(k, j) = result(k, j) - factor * result(i, j);
+        }
+      }
+    }
+  }
+  return eye;
+}
+*/
 
 }  // namespace ASC_bla
 
