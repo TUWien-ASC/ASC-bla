@@ -96,15 +96,31 @@ class MatrixView : public MatExpr<MatrixView<T, ORD>> {
   }
 
   auto Col(size_t i) const {
-    return VectorView<T, size_t>(rows_, dist_, data_ + i * dist_);
+    if constexpr (ORD == ColMajor) {
+      return VectorView<T>(rows_, data_ + i * dist_);
+    } else {
+      return VectorView<T, size_t>(rows_, dist_, data_ + i);
+    }
   }
 
   auto Rows(size_t first, size_t next) const {
-    return MatrixView(next - first, cols_, dist_, data_ + first);
+    // if constexpr (ORD == RowMajor) {
+    return MatrixView(next - first, cols_, data_ + first * dist_);
+    //} else {
+    // using OtherOrder =
+    //     std::conditional_t<ORD == ColMajor, RowMajor, ColMajor>;
+    // return MatrixView(next - first, cols_, data_ + first);
+    //}
   }
 
   auto Cols(size_t first, size_t next) const {
-    return MatrixView(rows_, next - first, dist_, data_ + first);
+    if constexpr (ORD == ColMajor) {
+      return MatrixView(rows_, next - first, data_ + first * dist_);
+    } else {
+      // using OtherOrder =
+      //     std::conditional_t<ORD == RowMajor, ColMajor, RowMajor>;
+      return MatrixView(rows_, next - first, data_ + first);
+    }
   }
 };
 

@@ -6,7 +6,7 @@ namespace bla = ASC_bla;
 
 int main() {
   size_t n = 10;
-  bla::Matrix<double, bla::RowMajor> x(n, n), y(n, n);
+  bla::Matrix<double, bla::ColMajor> x(n, n), y(n, n);
 
   for (size_t i = 0; i < x.SizeCols(); i++) {
     for (size_t j = 0; j < x.SizeRows(); j++) {
@@ -20,33 +20,46 @@ int main() {
       }
     }
   }
-  y = 1;
-  // print the matrices
-  std::cout << "Print the initial matrices" << std::endl;
-  std ::cout << "x = " << x << std::endl;
-  std ::cout << "y = " << y << std::endl;
 
-  bla::Matrix<double, bla::RowMajor> z = x + y;
-  bla::Matrix<double, bla::ColMajor> w(n, n);
-
-  std::cout << "x+y = " << z << std::endl;
-  //
-  std::cout << "type of (x+3*y) is  " << typeid(x + 3 * y).name() << std::endl;
-
-  z = x + 3 * y;
-  std::cout << "type of (x+3*y) is  " << z << std::endl;
   //
   //// x.Range(2, 9) = 3;
   //// x.Slice(1, 5) = 10;
   //
   std::cout << "x = " << x << std::endl;
-  // std::cout << "x.Transpose()= " << Transpose(x) << std::endl;
-  std::cout << "x.Transpose()= " << Transpose(x) << std::endl;
-  std::cout << "call transpose" << std::endl;
-
-  w = Transpose(x);
-  std::cout << "transpose is back" << std::endl;
 
   //  test x.Row(0)
-  std::cout << "x.Row(0) = " << x.Row(0) << w.Row(0) << std::endl;
+  std::cout << "x.Row(0) = " << x.Row(0) << std::endl;
+
+  //  test x.Col(0)
+  std::cout << "x.Col(0) = " << x.Col(0) << std::endl;
+
+  //  test x.Rows(0,2)
+  std::cout << "x.Rows(0,2) = " << x.Rows(0, 2) << std::endl;
+
+  //  test x.Cols(0,2)
+  std::cout << "x.Cols(0,2) = " << x.Cols(0, 2) << std::endl;
+
+  // create transpose matrix
+  bla::Matrix<double, bla::ColMajor> xT = Transpose(x);
+  std::cout << "xT = " << xT << std::endl;
+
+  // test xT.Row(0
+  std::cout << "xT.Row(0) = " << xT.Row(0) << std::endl;
+
+  // test xT.Col(0)
+  std::cout << "xT.Col(0) = " << xT.Col(0) << std::endl;
+
+  // test xT.Rows(0,2)
+  std::cout << "xT.Rows(0,2) = " << xT.Rows(0, 2) << std::endl;
+
+  // test xT.Cols(0,2)
+  std::cout << "xT.Cols(0,2) = " << xT.Cols(0, 2) << std::endl;
+
+  // test xT.Rows(0,2).Cols(0,2)
+  std::cout << "xT.Rows(0,2).Cols(0,2) = " << xT.Rows(0, 2).Cols(0, 2)
+            << std::endl;
+
+  // test xT.Cols(0,2).Rows(0,2)
+  std::cout << "xT.Cols(0,2).Rows(0,2) = " << xT.Cols(0, 2).Rows(0, 2)
+            << std::endl;
 }

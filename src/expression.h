@@ -1,18 +1,21 @@
 #ifndef FILE_EXPRESSION_H
 #define FILE_EXPRESSION_H
-
-
+/**************************************************************************/
+/* File:   matrix.h                                                       */
+/* Author: Joachim Schoeberl, Edoardo Bonetti                             */
+/* Date:   13. 10. 2023                                                   */
+/**************************************************************************/
 namespace ASC_bla
 {
 
   template <typename T>
   class VecExpr
   {
-  public:
-   auto Upcast() const { return static_cast<const T&>(*this); }
-   size_t Size() const { return Upcast().Size(); }
-   auto operator()(size_t i) const { return Upcast()(i); }
-   auto& operator()(size_t i) { return Upcast()(i); }
+   public:
+    auto Upcast() const { return static_cast<const T&>(*this); }
+    size_t Size() const { return Upcast().Size(); }
+    auto operator()(size_t i) const { return Upcast()(i); }
+    auto& operator()(size_t i) { return Upcast()(i); }
   };
   
  
@@ -24,7 +27,6 @@ namespace ASC_bla
   public:
     SumVecExpr (TA a, TB b) : a_(a), b_(b) { }
     auto Upcast() { return SumExpr(a_, b_); }
-
     auto operator() (size_t i) const { return a_(i)+b_(i); }
     size_t Size() const { return a_.Size(); }      
   };
@@ -42,7 +44,6 @@ namespace ASC_bla
   public:
     ScaleVecExpr (TSCAL scal, TV vec) : scal_(scal), vec_(vec) { }
     auto Upcast() { return ScalVecExpr(scal_, vec_); }
-
     auto operator() (size_t i) const { return scal_*vec_(i); }
     size_t Size() const { return vec_.Size(); }
   };
@@ -75,7 +76,6 @@ namespace ASC_bla
    public:
     SumMatExpr(TA a, TB b) : a_(a), b_(b) {}
     auto Upcast() { return SumExpr(a_, b_); }
-
     auto operator()(size_t i, size_t j) const { return a_(i, j) + b_(i, j); }
     size_t SizeCols() const { return a_.SizeCols(); }
     size_t SizeRows() const { return a_.SizeRows(); }
@@ -83,9 +83,8 @@ namespace ASC_bla
 
   template <typename TA, typename TB>
   auto operator+(const MatExpr<TA>& a, const MatExpr<TB>& b) {
-    return SumMatExpr<TA, TB>{a.Upcast(), b.Upcast()};
-    // why not
-    // return SumMatExpr(a.Upcast(), b.Upcast());
+    return SumMatExpr(a.Upcast(), b.Upcast());
+    // return SumMatExpr<TA, TB>{a.Upcast(), b.Upcast()};
   }
 
   template <typename TSCAL, typename TM>
@@ -96,7 +95,6 @@ namespace ASC_bla
    public:
     ScaleMatExpr(TSCAL scal, TM mat) : scal_(scal), mat_(mat) {}
     auto Upcast() { return ScalMatExpr(scal_, mat_); }
-
     auto operator()(size_t i, size_t j) const { return scal_ * mat_(i, j); }
     size_t SizeCols() const { return mat_.SizeCols(); }
     size_t SizeRows() const { return mat_.SizeRows(); }
@@ -104,9 +102,9 @@ namespace ASC_bla
 
   template <typename T>
   auto operator*(double scal, const MatExpr<T>& m) {
-    return ScaleMatExpr<double, T>(scal, m.Upcast());
-    // Why not ?
-    //    return ScaleMatExpr(scal, m.Upcast());
+    // return ScaleMatExpr<double, T>(scal, m.Upcast());
+    //  Why not ?
+    return ScaleMatExpr(scal, m.Upcast());
   }
 
   template <typename T>
@@ -125,6 +123,30 @@ namespace ASC_bla
       ost << std::endl;
     }
     return ost;
+  }
+
+  // define a matrix vector product
+  template <typename TM, typename TV>
+  class MatVecExpr : public VecExpr<MatVecExpr<TM, TV>> {
+    TM mat_;
+    TV vec_;
+
+   public:
+    MatVecExpr(TM mat, TV vec) : mat_(mat), vec_(vec) {}
+    auto Upcast() { return MatVecExpr(mat_, vec_); }
+    auto operator()(size_t i) const {
+      auto sum = 0.0;
+      for (size_t j = 0; j < mat_.SizeCols(); j++) {
+        sum += mat_(i, j) * vec_(j);
+      }
+      return sum;
+    }
+    size_t Size() const { return mat_.SizeRows(); }
+  };
+
+  template <typename TM, typename TV>
+  auto operator*(const MatExpr<TM>& m, const VecExpr<TV>& v) {
+    return MatVecExpr(m.Upcast(), v.Upcast());
   }
 }
  
