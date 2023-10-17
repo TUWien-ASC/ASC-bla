@@ -57,11 +57,8 @@ PYBIND11_MODULE(bla, m) {
             throw std::runtime_error("should be a 2-tuple!");
 
           Vector<double> v(t[0].cast<size_t>());
-          auto mem = t[1].cast<py::bytes>();
-          char* buffer;
-          py::ssize_t size;
-          PYBIND11_BYTES_AS_STRING_AND_SIZE(mem.ptr(), &buffer, &size);
-          std::memcpy((void*)&v(0), buffer, size);
+          py::bytes mem = t[1].cast<py::bytes>();
+          std::memcpy(&v(0), PYBIND11_BYTES_AS_STRING(mem.ptr()), v.Size()*sizeof(double));
           return v;
         }))
     ;
