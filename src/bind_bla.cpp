@@ -18,8 +18,12 @@ PYBIND11_MODULE(bla, m) {
       .def("__len__", &Vector<double>::Size,
            "return size of vector")
       
-      .def("__setitem__", [](Vector<double> & self, size_t i, double v) { self(i) = v; })
-      .def("__getitem__", [](Vector<double> & self, size_t i) { return self(i); })
+      .def("__setitem__", [](Vector<double> & self, int i, double v) {
+        if (i < 0) i += self.Size();
+        if (i < 0 || i >= self.Size()) throw py::index_error("vector index out of range");
+        self(i) = v;
+      })
+      .def("__getitem__", [](Vector<double> & self, int i) { return self(i); })
       
       .def("__setitem__", [](Vector<double> & self, py::slice inds, double val)
       {
@@ -41,5 +45,24 @@ PYBIND11_MODULE(bla, m) {
         str << self;
         return str.str();
       })
+
+     .def(py::pickle(
+        [](Vector<double> & self) { // __getstate__
+            /* return a tuple that fully encodes the state of the object */
+          return py::make_tuple(self.Size(),
+                                py::bytes((char*)(void*)&self(0), self.Size()*sizeof(double)));
+        },
+        [](py::tuple t) { // __setstate__
+          if (t.size() != 2)
+            throw std::runtime_error("should be a 2-tuple!");
+
+          Vector<double> v(t[0].cast<size_t>());
+          auto mem = t[1].cast<py::bytes>();
+          char* buffer;
+          py::ssize_t size;
+          PYBIND11_BYTES_AS_STRING_AND_SIZE(mem.ptr(), &buffer, &size);
+          std::memcpy((void*)&v(0), buffer, size);
+          return v;
+        }))
     ;
 }

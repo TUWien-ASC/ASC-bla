@@ -19,7 +19,7 @@ add_executable (test_vector tests/test_vector.cc)
 
 pybind11_add_module(bla src/bind_bla.cpp)
 
-# target_sources (bla PUBLIC src/vector.h src/expression.h)
-
 install (TARGETS bla DESTINATION ASCsoft)
+install (FILES src/vector.h DESTINATION ASCsoft/include)
+
 
