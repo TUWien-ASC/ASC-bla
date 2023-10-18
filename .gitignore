@@ -1,47 +1,23 @@
 
 # Ignore everything
-#*
+*
 
 # But not these files...
-#!/.gitignore
+!/.gitignore
 
-
-#!README.md
-#!LICENSE
-
+#setup.py
+!setup.py
+!README.md
+!pyproject.toml
+!LICENSE
+!CMakeLists.txt
+!build.sh
+!readthedocs.yaml
+!.clang-format
 
 # ...even if they are in subdirectories
-#!*/
-
-# don't ignore docs folder
-#!docs/
-
-# don't ignore src folder
-#!src/
-
-# don't ignore test folder
-#!test/
-
-# don't ignore .clang-format file
-#!.clang-format
-
-# don't ignore .gitignore file
-#!.gitignore
-
-# don't ignore .readthedocs.yml file
-#!.readthedocs.yml
-
-
-# don't ignore build.sh file
-#!build.sh
-
-# don't ignore CMakeLists.txt file
-#!CMakeLists.txt
-
-# don't ignore LICENSE file
-#!LICENSE
-
-
-# don't ignore README.md file
-#!README.md
-
+!*/
+!docs/
+!src/
+!test/
+!py_test/
