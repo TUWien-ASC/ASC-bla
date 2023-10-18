@@ -1,4 +1,5 @@
 from ASCsoft.bla import Vector
+from ASCsoft.bla import Matrix
 
 x = Vector(3)
 y = Vector(3)
@@ -77,9 +78,10 @@ print ("x =", x)
 #print(v*Y)
 #
 #
-#for i in range(3):
-#    for j in range(3):
-#        X[i,j] = 10*i +j
-#
-#print (X)
-#print (X.T)
+X = Matrix(3, 3)
+for i in range(3):
+    for j in range(3):
+        X[i,j] = 10*i +j
+
+print (X)
+print (X.T)
