@@ -148,6 +148,31 @@ namespace ASC_bla
   auto operator*(const MatExpr<TM>& m, const VecExpr<TV>& v) {
     return MatVecExpr(m.Upcast(), v.Upcast());
   }
+
+  // define a matrix vector product
+  template <typename TA, typename TB>
+  class ProdMatExpr : public MatExpr<ProdMatExpr<TA, TB>> {
+    TA a_;
+    TB b_;
+
+   public:
+    ProdMatExpr(TA a, TB b) : a_(a), b_(b) {}
+    auto Upcast() { return ProdMatExpr(a_, b_); }
+    auto operator()(size_t i, size_t j) const {
+      auto sum = 0.0;
+      for (size_t k = 0; k < a_.SizeCols(); k++) {
+        sum += a_(i, k) * b_(k, j);
+      }
+      return sum;
+    }
+    size_t SizeCols() const { return b_.SizeCols(); }
+    size_t SizeRows() const { return a_.SizeRows(); }
+  };
+
+  template <typename TA, typename TB>
+  auto operator*(const MatExpr<TA>& a, const MatExpr<TB>& b) {
+    return ProdMatExpr(a.Upcast(), b.Upcast());
+  }
 }
  
 #endif
