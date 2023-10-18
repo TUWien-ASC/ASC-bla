@@ -208,6 +208,7 @@ auto Transpose(const Matrix<T, ORD>& m) {
   return MatrixView<T, !ORD>(m.SizeCols(), m.SizeRows(), m.Data());
 }
 
+// create the inverse of a matrix
 /*
 template <typename T, ORDERING ORD>
 auto Inverse(const Matrix<T, ORD>& m) {
@@ -240,7 +241,6 @@ auto Inverse(const Matrix<T, ORD>& m) {
 */
 
 }  // namespace ASC_bla
-
 #endif
 
 /*
