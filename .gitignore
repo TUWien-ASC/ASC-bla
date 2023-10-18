@@ -1,47 +1,47 @@
 
 # Ignore everything
-*
+#*
 
 # But not these files...
-!/.gitignore
+#!/.gitignore
 
 
-!README.md
-!LICENSE
+#!README.md
+#!LICENSE
 
 
 # ...even if they are in subdirectories
-!*/
+#!*/
 
 # don't ignore docs folder
-!docs/
+#!docs/
 
 # don't ignore src folder
-!src/
+#!src/
 
 # don't ignore test folder
-!test/
+#!test/
 
 # don't ignore .clang-format file
-!.clang-format
+#!.clang-format
 
 # don't ignore .gitignore file
-!.gitignore
+#!.gitignore
 
 # don't ignore .readthedocs.yml file
-!.readthedocs.yml
+#!.readthedocs.yml
 
 
 # don't ignore build.sh file
-!build.sh
+#!build.sh
 
 # don't ignore CMakeLists.txt file
-!CMakeLists.txt
+#!CMakeLists.txt
 
 # don't ignore LICENSE file
-!LICENSE
+#!LICENSE
 
 
 # don't ignore README.md file
-!README.md
+#!README.md
 
