@@ -129,6 +129,7 @@ class Matrix : public MatrixView<T, ORD> {
   typedef MatrixView<T, ORD> BASE;
   using BASE::cols_;
   using BASE::data_;
+  using BASE::dist_;
   using BASE::rows_;
 
  public:
@@ -143,6 +144,7 @@ class Matrix : public MatrixView<T, ORD> {
     std::swap(cols_, m.cols_);
     std::swap(rows_, m.rows_);
     std::swap(data_, m.data_);
+    std::swap(dist_, m.dist_);
   }
 
   template <typename TB>
