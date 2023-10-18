@@ -62,4 +62,22 @@ int main() {
   // test xT.Cols(0,2).Rows(0,2)
   std::cout << "xT.Cols(0,2).Rows(0,2) = " << xT.Cols(0, 2).Rows(0, 2)
             << std::endl;
+
+  std::cout << "multiplication by scalar" << std::endl;
+  std::cout << "2 * x = " << 2 * x << std::endl;
+
+  std::cout << "x = " << x << std::endl;
+  std::cout << "y = " << y << std::endl;
+
+  std::cout << "multiplication by matrix" << std::endl;
+  std::cout << "x * y = " << x * x << std::endl;
+
+  std::cout << "multiplication by vector" << std::endl;
+  bla::Vector<double> v(n);
+  for (size_t i = 0; i < v.Size(); i++) {
+    v(i) = 1;
+  }
+  std::cout << "v = " << v << std::endl;
+  std::cout << "x " << x << std::endl;
+  std::cout << "x * v = " << x * v << std::endl;
 }
