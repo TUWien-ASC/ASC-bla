@@ -6,7 +6,7 @@ namespace bla = ASC_bla;
 
 int main() {
   size_t n = 10;
-  bla::Matrix<double, bla::ColMajor> x(n, n), y(n, n);
+  bla::Matrix<double, bla::ColMajor> x(n, n), y(n, n), k(n, n );
 
   for (size_t i = 0; i < x.SizeCols(); i++) {
     for (size_t j = 0; j < x.SizeRows(); j++) {
@@ -20,6 +20,13 @@ int main() {
       }
     }
   }
+
+  k = Inverse(y);
+
+  std::cout << k << std::endl;
+
+  std::cout << k*y<< std::endl;
+
 
   //
   //// x.Range(2, 9) = 3;
