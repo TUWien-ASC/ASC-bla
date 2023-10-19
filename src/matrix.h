@@ -211,36 +211,41 @@ auto Transpose(const Matrix<T, ORD>& m) {
 }
 
 // create the inverse of a matrix
-/*
+
 template <typename T, ORDERING ORD>
 auto Inverse(const Matrix<T, ORD>& m) {
-  MatrixView<T, ORD> eye(m.SizeRows(), m.SizeCols()) = 0;
-  for (size_t i = 0; i < m.SizeRows(); i++) {
-    eye(i, i) = 1;
-  }
+
+  size_t L = m.SizeCols();
+  Matrix<T, ORD> eye(L,L);
+  Matrix<T, ORD> A(m);//(m.SizeRows(), m.SizeCols()) = 0;
+
+  // Inizialise the eye
+  eye = 0;
+  for (size_t i = 0; i < m.SizeRows(); i++)
+  eye(i, i) = 1;
 
   for (size_t i = 0; i < eye.SizeRows(); i++) {
-    T pivot = result(i, i);
+    T pivot = A(i, i);
 
     // Make pivot element 1
-    for (size_t j = 0; j < cols_; j++) {
+    for (size_t j = 0; j < L; j++) {
       eye(i, j) = eye(i, j) / pivot;
-      result(i, j) = result(i, j) / pivot;
+      A(i, j) = A(i, j) / pivot;
     }
 
-    for (size_t k = 0; k < rows_; k++) {
+    for (size_t k = 0; k < L; k++) {
       if (k != i) {
-        T factor = result(k, i);
-        for (size_t j = 0; j < cols_; j++) {
+        T factor = A(k, i);
+        for (size_t j = 0; j < L; j++) {
           eye(k, j) = eye(k, j) - factor * eye(i, j);
-          result(k, j) = result(k, j) - factor * result(i, j);
+          A(k, j) = A(k, j) - factor * A(i, j);
         }
       }
     }
   }
   return eye;
 }
-*/
+
 
 }  // namespace ASC_bla
 #endif
