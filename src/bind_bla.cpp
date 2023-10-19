@@ -47,6 +47,9 @@ PYBIND11_MODULE(bla, m) {
 
       .def("__rmul__", [](Vector<double>& self,
                           double scal) { return Vector<double>(scal * self); })
+      
+      .def("__mul__", [](Vector<double>& self,
+                          double scal) { return Vector<double>(scal * self); })
 
       .def("__str__",
            [](const Vector<double>& self) {
@@ -89,26 +92,26 @@ PYBIND11_MODULE(bla, m) {
       }))
 
       .def("__getitem__",
-           [](Matrix<double, RowMajor> self, std::tuple<int, int> i) {
+           [](Matrix<double, RowMajor> & self, std::tuple<int, int> i) {
              return self(std::get<0>(i), std::get<1>(i));
            })
       .def("__setitem__",
            [](Matrix<double, RowMajor>& self, std::tuple<int, int> i,
               double val) { self(std::get<0>(i), std::get<1>(i)) = val; })
 
-      //.def("__getitem__",
-      //     [](Matrix<double, RowMajor>& self,
-      //        std::tuple<py::slice, py::slice> inds) {
-      //       size_t start1, stop1, step1, n1;
-      //       size_t start2, stop2, step2, n2;
-      //       if (!std::get<0>(inds).compute(self.SizeRows(), &start1, &stop1,
-      //                                      &step1, &n1))
-      //         throw py::error_already_set();
-      //       if (!std::get<1>(inds).compute(self.SizeCols(), &start2, &stop2,
-      //                                      &step2, &n2))
-      //         throw py::error_already_set();
-      //       return self.Cols(start1, stop1).Rows(start2, stop2);
-      //     })
+      .def("__getitem__",
+           [](Matrix<double, RowMajor>& self,
+              std::tuple<py::slice, py::slice> inds) {
+             size_t start1, stop1, step1, n1;
+             size_t start2, stop2, step2, n2;
+             if (!std::get<0>(inds).compute(self.SizeRows(), &start1, &stop1,
+                                            &step1, &n1))
+               throw py::error_already_set();
+             if (!std::get<1>(inds).compute(self.SizeCols(), &start2, &stop2,
+                                            &step2, &n2))
+               throw py::error_already_set();
+             return Matrix<double , RowMajor>(self.Cols(start1, stop1).Rows(start2, stop2));
+           })
 
       .def("__setitem__",
            [](Matrix<double, RowMajor>& self,
@@ -199,13 +202,13 @@ PYBIND11_MODULE(bla, m) {
                                return Matrix<double, RowMajor>(Transpose(self));
                              })
 
-      /*
+      
       // inverse
       .def_property_readonly("inv",
                              [](const Matrix<double, RowMajor>& self) {
                                return Matrix<double, RowMajor>(Inverse(self));
                              })
-      */
+      
 
       ;
 }
