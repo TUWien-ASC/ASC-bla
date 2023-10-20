@@ -17,11 +17,18 @@ for i in range(n):
  
 print(X)
 
-        
+
 #print (X)
 #print (X.T)
 #
 #print(X.inv)
 
+X[3, 0:10:4]=100
 
-print((X)[0:3,0])
+print((X))
+
+x = Vector(10)
+for i in range(10):
+    x[i] = 10
+x[0:10:4] = 3
+print (x)
