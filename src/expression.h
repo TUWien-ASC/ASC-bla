@@ -54,6 +54,25 @@ namespace ASC_bla
     return ScaleVecExpr(scal, v.Upcast());
   }
 
+  // addition by a scalar
+
+  template <typename TSCAL, typename TV>
+  class ScaleVecSumExpr : public VecExpr<ScaleVecSumExpr<TSCAL, TV>> {
+    TSCAL scal_;
+    TV vec_;
+
+   public:
+    ScaleVecSumExpr(TSCAL scal, TV vec) : scal_(scal), vec_(vec) {}
+    auto Upcast() { return ScalVecExpr(scal_, vec_); }
+    auto operator()(size_t i) const { return scal_ + vec_(i); }
+    size_t Size() const { return vec_.Size(); }
+  };
+
+  template <typename T>
+  auto operator+(double scal, const VecExpr<T>& v) {
+    return ScaleVecSumExpr(scal, v.Upcast());
+  }
+
   /****************************************************************/
   /*         My implementation of the matrix class                */
   /****************************************************************/
@@ -172,6 +191,63 @@ namespace ASC_bla
   template <typename TA, typename TB>
   auto operator*(const MatExpr<TA>& a, const MatExpr<TB>& b) {
     return ProdMatExpr(a.Upcast(), b.Upcast());
+  }
+
+  // define a matrix scalar addition
+  template <typename TSCAL, typename TM>
+  class ScaleMatSumExpr : public MatExpr<ScaleMatSumExpr<TSCAL, TM>> {
+    TSCAL scal_;
+    TM mat_;
+
+   public:
+    ScaleMatSumExpr(TSCAL scal, TM mat) : scal_(scal), mat_(mat) {}
+    auto Upcast() { return ScaleMatSumExpr(scal_, mat_); }
+    auto operator()(size_t i, size_t j) const { return scal_ + mat_(i, j); }
+    size_t SizeCols() const { return mat_.SizeCols(); }
+    size_t SizeRows() const { return mat_.SizeRows(); }
+  };
+
+  template <typename T>
+  auto operator+(double scal, const MatExpr<T>& m) {
+    return ScaleMatSumExpr(scal, m.Upcast());
+  }
+
+  // define a matrix scalar subtraction
+  template <typename TSCAL, typename TM>
+  class ScaleMatSubExpr : public MatExpr<ScaleMatSubExpr<TSCAL, TM>> {
+    TSCAL scal_;
+    TM mat_;
+
+   public:
+    ScaleMatSubExpr(TSCAL scal, TM mat) : scal_(scal), mat_(mat) {}
+    auto Upcast() { return ScaleMatSubExpr(scal_, mat_); }
+    auto operator()(size_t i, size_t j) const { return scal_ - mat_(i, j); }
+    size_t SizeCols() const { return mat_.SizeCols(); }
+    size_t SizeRows() const { return mat_.SizeRows(); }
+  };
+
+  template <typename T>
+  auto operator-(double scal, const MatExpr<T>& m) {
+    return ScaleMatSubExpr(scal, m.Upcast());
+  }
+
+  // define a matrix scalar subtraction
+  template <typename TA, typename TB>
+  class SumMatSubExpr : public MatExpr<SumMatSubExpr<TA, TB>> {
+    TA a_;
+    TB b_;
+
+   public:
+    SumMatSubExpr(TA a, TB b) : a_(a), b_(b) {}
+    auto Upcast() { return SumMatSubExpr(a_, b_); }
+    auto operator()(size_t i, size_t j) const { return a_(i, j) - b_(i, j); }
+    size_t SizeCols() const { return a_.SizeCols(); }
+    size_t SizeRows() const { return a_.SizeRows(); }
+  };
+
+  template <typename TA, typename TB>
+  auto operator-(const MatExpr<TA>& a, const MatExpr<TB>& b) {
+    return SumMatSubExpr(a.Upcast(), b.Upcast());
   }
 }
  
