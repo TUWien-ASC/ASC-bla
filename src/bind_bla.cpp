@@ -6,6 +6,7 @@
 
 #include "matrix.h"
 #include "vector.h"
+// #include "matrix.h"
 
 using namespace ASC_bla;
 namespace py = pybind11;
@@ -129,6 +130,36 @@ PYBIND11_MODULE(bla, m) {
                  .Slice(0, step) = val;
            })
 
+      // getter for the cols
+      .def("__getitem__",
+           [](Matrix<double, RowMajor>& self, std::tuple<py::slice, int> inds) {
+             size_t start, stop, step, n;
+             if (!std::get<0>(inds).compute(self.SizeRows(), &start, &stop,
+                                            &step, &n))
+               throw py::error_already_set();
+             if (std::get<1>(inds) < 0) std::get<1>(inds) += self.SizeCols();
+             // now cast hardcast to size_t
+             return self.Col((size_t)std::get<1>(inds))
+                 .Range(start, stop)
+                 .Slice(0, step);
+           })
+
+      // setter for the cols
+      .def("__setitem__",
+           [](Matrix<double, RowMajor>& self, std::tuple<py::slice, int> inds,
+              double val) {
+             size_t start, stop, step, n;
+             if (!std::get<0>(inds).compute(self.SizeRows(), &start, &stop,
+                                            &step, &n))
+               throw py::error_already_set();
+             if (std::get<1>(inds) < 0) std::get<1>(inds) += self.SizeCols();
+             // now cast hardcast to size_t
+             self.Col((size_t)std::get<1>(inds))
+                 .Range(start, stop)
+                 .Slice(0, step);
+           })
+
+      // getter for the submatrix
       .def("__getitem__",
            [](Matrix<double, RowMajor>& self,
               std::tuple<py::slice, py::slice> inds) {
@@ -157,30 +188,30 @@ PYBIND11_MODULE(bla, m) {
                throw py::error_already_set();
              self.Cols(start1, stop1).Rows(start2, stop2) = val;
            })
-      .def("__setitem__",
-           [](Matrix<double, RowMajor>& self, std::tuple<int, py::slice> inds,
-              double val) {
-             size_t start, stop, step, n;
-             if (!std::get<1>(inds).compute(self.SizeCols(), &start, &stop,
-                                            &step, &n))
-               throw py::error_already_set();
-             self.Rows(std::get<0>(inds), std::get<0>(inds) + 1)
-                 .Cols(start, stop) = val;
-           })
-      .def("__setitem__",
-           [](Matrix<double, RowMajor>& self, std::tuple<py::slice, int> inds,
-              double val) {
-             size_t start, stop, step, n;
-             if (!std::get<0>(inds).compute(self.SizeRows(), &start, &stop,
-                                            &step, &n))
-               throw py::error_already_set();
-             self.Rows(start, stop)
-                 .Cols(std::get<1>(inds), std::get<1>(inds) + 1) = val;
-           })
 
       .def("__add__",
            [](Matrix<double, RowMajor>& self, Matrix<double, RowMajor>& other) {
              return Matrix<double, RowMajor>(self + other);
+           })
+
+      .def("__sub__",
+           [](Matrix<double, RowMajor>& self, Matrix<double, RowMajor>& other) {
+             return Matrix<double, RowMajor>(self - other);
+           })
+      .def("__sub__",
+           [](Matrix<double, RowMajor>& self, double scal) {
+             Matrix<double, RowMajor> res(self);
+             res = scal;
+             return Matrix<double, RowMajor>(self - res);
+           })
+
+      // addition by scalar matrix
+      .def("__add__",
+           [](Matrix<double, RowMajor>& self, double scal) {
+             Matrix<double, RowMajor> res(self);
+             res = scal;
+             std::cout << "res = " << res << std::endl;
+             return Matrix<double, RowMajor>(self + res);
            })
 
       // mult by scalar matrix
@@ -239,5 +270,22 @@ PYBIND11_MODULE(bla, m) {
                                return Matrix<double, RowMajor>(Inverse(self));
                              })
 
-      ;
+      .def(py::pickle(
+          [](Matrix<double, RowMajor>& self) {  // __getstate__
+            /* return a tuple that fully encodes the state of the object */
+            return py::make_tuple(
+                self.SizeRows(), self.SizeCols(),
+                py::bytes((char*)(void*)&self(0, 0),
+                          self.SizeRows() * self.SizeCols() * sizeof(double)));
+          },
+          [](py::tuple t) {  // __setstate__
+            if (t.size() != 2) throw std::runtime_error("should be a 2-tuple!");
+
+            Matrix<double, RowMajor> v(t[0].cast<size_t>(),
+                                       t[1].cast<size_t>());
+            py::bytes mem = t[2].cast<py::bytes>();
+            std::memcpy(&v(0, 0), PYBIND11_BYTES_AS_STRING(mem.ptr()),
+                        v.SizeCols() * v.SizeRows() * sizeof(double));
+            return v;
+          }));
 }

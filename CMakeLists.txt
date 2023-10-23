@@ -1,17 +1,14 @@
 cmake_minimum_required(VERSION 3.20)
 project(ASC_bla)
 
-
-set (CMAKE_CXX_STANDARD 17)
-
+set(CMAKE_CXX_STANDARD 17)
 
 include_directories(src)
 
-#<<<<<<< main
-#add_subdirectory (tests)
+# <<<<<<< main
+# add_subdirectory (tests)
 
-#=======
-
+# =======
 find_package(Python 3.8 COMPONENTS Interpreter Development REQUIRED)
 
 execute_process(
@@ -20,15 +17,12 @@ execute_process(
 list(APPEND CMAKE_PREFIX_PATH "${PYBIND11_DIR}")
 find_package(pybind11 CONFIG REQUIRED)
 
-
-add_executable (test_vector tests/test_vector.cc)
+add_executable(test_vector tests/test_vector.cc)
 add_executable(test_matrix tests/test_matrix.cc)
-#>>>>>>> pybind
 
+# >>>>>>> pybind
 pybind11_add_module(bla src/bind_bla.cpp)
 
-install (TARGETS bla DESTINATION ASCsoft)
-install (FILES src/vector.h DESTINATION ASCsoft/include)
+install(TARGETS bla DESTINATION ASCsoft)
+install(FILES src/vector.h DESTINATION ASCsoft/include)
 install(FILES src/matrix.h DESTINATION ASCsoft/include)
-
-

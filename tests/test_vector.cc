@@ -22,6 +22,7 @@ int main()
   
   std::cout << "type of (x+3*y) is  " << typeid(x+3*y).name() << std::endl;
 
+  // print the type of x+y
   x.Range(2,9) = 3;
   x.Slice(1,5) = 10;
   
