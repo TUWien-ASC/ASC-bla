@@ -1,3 +1,6 @@
+import matplotlib.pyplot as plt
+
+
 from ASCsoft.bla import Vector
 from ASCsoft.bla import Matrix
 
@@ -42,14 +45,14 @@ X=-2*X
 # (width=height=n, with n=10, n=100, n=1000). 
 # Split times into actual C++ computations, and overhead due to Python wrapping.
 # Compare with Numpy timings in milliseconds.
-
+#
 import time
 import numpy as np
 
 T_cpp = []
 T_np = []
 
-for n in [100*n for n in range(1,14)]:
+for n in [100*n for n in range(1,8)]:
 
     X = Matrix(n,n)
     Y = Matrix(n,n)
@@ -74,7 +77,6 @@ for n in [100*n for n in range(1,14)]:
     T_np.append(t3-t2)
 
 # Plot timings log scale
-import matplotlib.pyplot as plt
 plt.figure()
 plt.plot(np.log(T_cpp), label="C++")
 plt.plot(np.log(T_np), label="Numpy")
@@ -82,4 +84,7 @@ plt.legend()
 plt.xlabel("n")
 plt.ylabel("time [s]")
 plt.title("Matrix-Matrix multiplication")
+format="svg"
 plt.show()
+#plt.savefig("test_vector.svg",format=format, dpi=1200)
+
