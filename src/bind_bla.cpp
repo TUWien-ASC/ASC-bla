@@ -79,7 +79,7 @@ PYBIND11_MODULE(bla, m) {
       ;
 
   // from here my Matrix implementation
-  py::class_<Matrix<double, RowMajor>>(m, "Matrix")
+  py::class_<Matrix<double, RowMajor>>(m, "Matrix",  py::buffer_protocol())
       //.def(py::init<size_t, size_t>(), py::arg("rows"), py::arg("cols"),
       //     "create matrix : rows x cols")
       //  .def("__getitem__",
@@ -287,5 +287,18 @@ PYBIND11_MODULE(bla, m) {
             std::memcpy(&v(0, 0), PYBIND11_BYTES_AS_STRING(mem.ptr()),
                         v.SizeCols() * v.SizeRows() * sizeof(double));
             return v;
-          }));
+          }))
+          
+             .def_buffer([](Matrix<double, RowMajor> &v) -> py::buffer_info {
+        return py::buffer_info(
+        v.Data(),                               /* Pointer to buffer */
+            sizeof(double),                          /* Size of one scalar */
+            py::format_descriptor<double>::format(), /* Python struct-style format descriptor */
+            2,                                      /* Number of dimensions */
+            { v.SizeRows(), v.SizeCols() },                 /* Buffer dimensions */
+            { sizeof(double) * v.SizeCols(),             /* Strides (in bytes) for each index */
+              sizeof(double) }
+        );
+    })
+          ;
 }

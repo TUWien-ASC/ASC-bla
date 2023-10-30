@@ -52,7 +52,7 @@ import numpy as np
 T_cpp = []
 T_np = []
 
-for n in [100*n for n in range(1,8)]:
+for n in [100*n for n in range(1,14)]:
 
     X = Matrix(n,n)
     Y = Matrix(n,n)
@@ -77,9 +77,10 @@ for n in [100*n for n in range(1,8)]:
     T_np.append(t3-t2)
 
 # Plot timings log scale
+dims = np.log(np.asarray([100*n for n in range(1,14)]))
 plt.figure()
-plt.plot(np.log(T_cpp), label="C++")
-plt.plot(np.log(T_np), label="Numpy")
+plt.plot(dims,np.log(T_cpp), label="C++")
+plt.plot(dims,np.log(T_np), label="Numpy")
 plt.legend()
 plt.xlabel("n")
 plt.ylabel("time [s]")
