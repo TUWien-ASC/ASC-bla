@@ -140,6 +140,7 @@ namespace ASC_bla
         ost << m(i, j) << " ";
       }
       ost << std::endl;
+
     }
     return ost;
   }

@@ -1,5 +1,3 @@
-import matplotlib.pyplot as plt
-
 
 from ASCsoft.bla import Vector
 from ASCsoft.bla import Matrix
@@ -88,4 +86,6 @@ plt.title("Matrix-Matrix multiplication")
 format="svg"
 plt.show()
 #plt.savefig("test_vector.svg",format=format, dpi=1200)
+
+
 
