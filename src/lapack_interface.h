@@ -51,7 +51,7 @@ namespace ASC_bla
     int err = 
       daxpy_ (&n, &alpha, &x(0),  &incx, &y(0), &incy);
     if (err != 0)
-      std::cerr << "daxpy returned errcode " << err << std::endl;
+      throw std::runtime_error(std::string("daxpy returned errcode "+std::to_string(err)));      
   }
   
   
