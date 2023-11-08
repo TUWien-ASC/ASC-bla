@@ -59,14 +59,12 @@ namespace ASC_bla
 
   // BLAS-3 functions:
   
-  /*
-    int dgemm_ (char *transa, char *transb, integer *m, integer *
-    n, integer *k, doublereal *alpha, doublereal *a, integer *lda, 
-    doublereal *b, integer *ldb, doublereal *beta, doublereal *c__, 
-    integer *ldc);
-  */
+  // int dgemm_ (char *transa, char *transb, integer *m, integer * n,
+  // integer *k, doublereal *alpha, doublereal *a, integer *lda, 
+  // doublereal *b, integer *ldb, doublereal *beta, doublereal *c__, 
+  // integer *ldc);
 
-
+  /*  
   // c = a*b
   template <ORDERING OA, ORDERING OB>
   void MultMatMatLapack (MatrixView<double, OA> a,
@@ -101,11 +99,11 @@ namespace ASC_bla
   {
     MultMatMatLapack (Trans(b), Trans(a), Trans(c));
   }
-
+  */
 
   
 
-
+  /*
   template <ORDERING ORD>
   class LapackLU {
     Matrix <double, ORD> a;
@@ -162,12 +160,12 @@ namespace ASC_bla
       return std::move(a);      
     }
 
-    /*
-      Matrix<double,ORD> LFactor() const { ... }
-      Matrix<double,ORD> UFactor() const { ... }
-      Matrix<double,ORD> PFactor() const { ... }
-    */
+    // Matrix<double,ORD> LFactor() const { ... }
+    // Matrix<double,ORD> UFactor() const { ... }
+    // Matrix<double,ORD> PFactor() const { ... }
   };
+  */ 
+
   
 }
 
