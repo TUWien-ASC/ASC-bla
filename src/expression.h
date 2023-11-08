@@ -6,103 +6,66 @@ namespace ASC_bla
 {
 
   template <typename T>
-    class Expr
-    {
-    public:
-      auto View() const { return static_cast<const T&> (*this); }
-      size_t Size() const { return View().Size(); }
-      auto operator() (size_t i) const { return View()(i); }
-      auto & operator() (size_t i) { return  View()(i); }
-    };
-  
-  
-  template <typename T, typename TDIST = std::integral_constant<size_t,1> >
-  class VectorView : public Expr<VectorView<T,TDIST>>
+  class VecExpr
   {
-  protected:
-    T * data_;
-    size_t size_;
-    TDIST dist_;
   public:
-    VectorView (size_t size, T * data)
-      : data_(data), size_(size) { }
-    
-    VectorView (size_t size, TDIST dist, T * data)
-      : data_(data), size_(size), dist_(dist) { }
-    
-    template <typename TB>
-    VectorView & operator= (const Expr<TB> & v2)
-    {
-      for (size_t i = 0; i < size_; i++)
-        data_[dist_*i] = v2(i);
-      return *this;
-    }
-
-    VectorView & operator= (T scal)
-    {
-      for (size_t i = 0; i < size_; i++)
-        data_[dist_*i] = scal;
-      return *this;
-    }
-    
-    auto View() const { return VectorView(size_, dist_, data_); }
-    size_t Size() const { return size_; }
-    auto Dist() const { return dist_; }
-    T & operator()(size_t i) { return data_[dist_*i]; }
-    const T & operator()(size_t i) const { return data_[dist_*i]; }
-    
-    auto Range(size_t first, size_t next) const {
-      return VectorView(next-first, dist_, data_+first);
-    }
-
-    auto Slice(size_t first, size_t slice) const {
-      return VectorView<T,size_t> (size_/slice, dist_*slice, data_+first*dist_);
-    }
-      
+    auto Upcast() const { return static_cast<const T&> (*this); }
+    size_t Size() const { return Upcast().Size(); }
+    auto operator() (size_t i) const { return Upcast()(i); }
   };
   
-  
+ 
   template <typename TA, typename TB>
-    class SumExpr : public Expr<SumExpr<TA,TB>>
-    {
-      TA a_;
-      TB b_;
-    public:
-      SumExpr (TA a, TB b) : a_(a), b_(b) { }
-      auto View () { return SumExpr(a_, b_); }
-
-      auto operator() (size_t i) const { return a_(i)+b_(i); }
-      size_t Size() const { return a_.Size(); }      
-    };
-  
-  template <typename TA, typename TB>
-    auto operator+ (const Expr<TA> & a, const Expr<TB> & b)
+  class SumVecExpr : public VecExpr<SumVecExpr<TA,TB>>
   {
-    return SumExpr(a.View(), b.View());
+    TA a_;
+    TB b_;
+  public:
+    SumVecExpr (TA a, TB b) : a_(a), b_(b) { }
+
+    auto operator() (size_t i) const { return a_(i)+b_(i); }
+    size_t Size() const { return a_.Size(); }      
+  };
+  
+  template <typename TA, typename TB>
+  auto operator+ (const VecExpr<TA> & a, const VecExpr<TB> & b)
+  {
+    return SumVecExpr(a.Upcast(), b.Upcast());
   }
 
 
 
   
   template <typename TSCAL, typename TV>
-    class ScaleExpr : public Expr<ScaleExpr<TSCAL,TV>>
-    {
-      TSCAL scal_;
-      TV vec_;
-    public:
-      ScaleExpr (TSCAL scal, TV vec) : scal_(scal), vec_(vec) { }
-      auto View () { return ScalExpr(scal_, vec_); }
+  class ScaleVecExpr : public VecExpr<ScaleVecExpr<TSCAL,TV>>
+  {
+    TSCAL scal_;
+    TV vec_;
+  public:
+    ScaleVecExpr (TSCAL scal, TV vec) : scal_(scal), vec_(vec) { }
 
-      auto operator() (size_t i) const { return scal_*vec_(i); }
-      size_t Size() const { return vec_.Size(); }      
-    };
+    auto operator() (size_t i) const { return scal_*vec_(i); }
+    size_t Size() const { return vec_.Size(); }      
+  };
   
   template <typename T>
-    auto operator* (double scal, const Expr<T> & v)
-    {
-      return ScaleExpr(scal, v.View());
-    }
+  auto operator* (double scal, const VecExpr<T> & v)
+  {
+    return ScaleVecExpr(scal, v.Upcast());
+  }
 
+
+
+  template <typename T>
+  std::ostream & operator<< (std::ostream & ost, const VecExpr<T> & v)
+  {
+    if (v.Size() > 0)
+      ost << v(0);
+    for (size_t i = 1; i < v.Size(); i++)
+      ost << ", " << v(i);
+    return ost;
+  }
+  
 }
  
 #endif
