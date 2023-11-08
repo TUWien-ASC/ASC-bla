@@ -125,8 +125,7 @@ namespace ASC_bla
     }
     
     // b overwritten with A^{-1} b
-    template <typename Db>
-    void Solve (VectorView<double,Db> b) const {
+    void Solve (VectorView<double> b) const {
       char transa =  (ORD == ColMajor) ? 'N' : 'T';
       integer n = a.Height();
       integer nrhs = 1;
