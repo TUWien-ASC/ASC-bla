@@ -3,7 +3,7 @@
 
 #include <iostream>
 
-#include "expression.h"
+#include "expression.hpp"
 
 
 namespace ASC_bla
@@ -15,42 +15,42 @@ namespace ASC_bla
   class VectorView : public VecExpr<VectorView<T,TDIST>>
   {
   protected:
-    T * data_;
-    size_t size_;
-    TDIST dist_;
+    T * data;
+    size_t size;
+    TDIST dist;
   public:
-    VectorView (size_t size, T * data)
-      : data_(data), size_(size) { }
+    VectorView (size_t _size, T * _data)
+      : data(_data), size(_size) { }
     
-    VectorView (size_t size, TDIST dist, T * data)
-      : data_(data), size_(size), dist_(dist) { }
+    VectorView (size_t _size, TDIST _dist, T * _data)
+      : data(_data), size(_size), dist(_dist) { }
     
     template <typename TB>
     VectorView & operator= (const VecExpr<TB> & v2)
     {
-      for (size_t i = 0; i < size_; i++)
-        data_[dist_*i] = v2(i);
+      for (size_t i = 0; i < size; i++)
+        data[dist*i] = v2(i);
       return *this;
     }
 
     VectorView & operator= (T scal)
     {
-      for (size_t i = 0; i < size_; i++)
-        data_[dist_*i] = scal;
+      for (size_t i = 0; i < size; i++)
+        data[dist*i] = scal;
       return *this;
     }
     
-    auto View() const { return VectorView(size_, dist_, data_); }
-    size_t Size() const { return size_; }
-    T & operator()(size_t i) { return data_[dist_*i]; }
-    const T & operator()(size_t i) const { return data_[dist_*i]; }
+    auto View() const { return VectorView(size, dist, data); }
+    size_t Size() const { return size; }
+    T & operator()(size_t i) { return data[dist*i]; }
+    const T & operator()(size_t i) const { return data[dist*i]; }
     
     auto Range(size_t first, size_t next) const {
-      return VectorView(next-first, dist_, data_+first*dist_);
+      return VectorView(next-first, dist, data+first*dist);
     }
 
     auto Slice(size_t first, size_t slice) const {
-      return VectorView<T,size_t> (size_/slice, dist_*slice, data_+first*dist_);
+      return VectorView<T,size_t> (size/slice, dist*slice, data+first*dist);
     }
       
   };
@@ -88,7 +88,7 @@ namespace ASC_bla
       *this = v;
     }
     
-    ~Vector () { delete [] data_; }
+    ~Vector () { delete [] data; }
 
     using BASE::operator=;
     Vector & operator=(const Vector & v2)
