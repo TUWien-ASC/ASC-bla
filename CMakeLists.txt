@@ -5,7 +5,7 @@ set (CMAKE_CXX_STANDARD 11)
 
 include_directories(src)
 
-add_subdirectory (tests)
+add_subdirectory (demos)
 
 
 
