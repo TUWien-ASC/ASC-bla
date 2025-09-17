@@ -17,13 +17,13 @@ namespace ASC_bla
   template <typename TA, typename TB>
   class SumVecExpr : public VecExpr<SumVecExpr<TA,TB>>
   {
-    TA a_;
-    TB b_;
+    TA a;
+    TB b;
   public:
-    SumVecExpr (TA a, TB b) : a_(a), b_(b) { }
+    SumVecExpr (TA _a, TB _b) : a(_a), b(_b) { }
 
-    auto operator() (size_t i) const { return a_(i)+b_(i); }
-    size_t Size() const { return a_.Size(); }      
+    auto operator() (size_t i) const { return a(i)+b(i); }
+    size_t Size() const { return a.Size(); }      
   };
   
   template <typename TA, typename TB>
@@ -38,13 +38,13 @@ namespace ASC_bla
   template <typename TSCAL, typename TV>
   class ScaleVecExpr : public VecExpr<ScaleVecExpr<TSCAL,TV>>
   {
-    TSCAL scal_;
-    TV vec_;
+    TSCAL scal;
+    TV vec;
   public:
-    ScaleVecExpr (TSCAL scal, TV vec) : scal_(scal), vec_(vec) { }
+    ScaleVecExpr (TSCAL _scal, TV _vec) : scal(_scal), vec(_vec) { }
 
-    auto operator() (size_t i) const { return scal_*vec_(i); }
-    size_t Size() const { return vec_.Size(); }      
+    auto operator() (size_t i) const { return scal*vec(i); }
+    size_t Size() const { return vec.Size(); }      
   };
   
   template <typename T>
