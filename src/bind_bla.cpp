@@ -1,7 +1,7 @@
 #include <sstream>
 #include <pybind11/pybind11.h>
 
-#include "vector.h"
+#include "vector.hpp"
 
 using namespace ASC_bla;
 namespace py = pybind11;

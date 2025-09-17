@@ -1,6 +1,6 @@
 #include <iostream>
 
-#include <vector.h>
+#include <vector.hpp>
 
 namespace bla = ASC_bla;
 
@@ -22,10 +22,12 @@ int main()
   
   std::cout << "type of (x+3*y) is  " << typeid(x+3*y).name() << std::endl;
 
+  std::cout << "x+3*y = " << x+3*y << std::endl;
+
+  std::cout << "sizeof(x+3*y) = " << sizeof(x+3*y) << std::endl;
+  
   x.Range(2,9) = 3;
   x.Slice(1,5) = 10;
   
   std::cout << "x = " << x << std::endl;  
 }
-
-
