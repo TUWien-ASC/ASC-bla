@@ -31,5 +31,3 @@ int main()
   
   std::cout << "x = " << x << std::endl;  
 }
-
-
