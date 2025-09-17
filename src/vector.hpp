@@ -1,5 +1,5 @@
-#ifndef FILE_VECTOR_H
-#define FILE_VECTOR_H
+#ifndef FILE_VECTOR
+#define FILE_VECTOR
 
 #include <iostream>
 
@@ -62,8 +62,8 @@ namespace ASC_bla
   class Vector : public VectorView<T>
   {
     typedef VectorView<T> BASE;
-    using BASE::size_;
-    using BASE::data_;
+    using BASE::size;
+    using BASE::data;
   public:
     Vector (size_t size) 
       : VectorView<T> (size, new T[size]) { ; }
@@ -77,8 +77,8 @@ namespace ASC_bla
     Vector (Vector && v)
       : VectorView<T> (0, nullptr)
     {
-      std::swap(size_, v.size_);
-      std::swap(data_, v.data_);
+      std::swap(size, v.size);
+      std::swap(data, v.data);
     }
 
     template <typename TB>
@@ -88,24 +88,22 @@ namespace ASC_bla
       *this = v;
     }
     
-    
     ~Vector () { delete [] data_; }
 
     using BASE::operator=;
     Vector & operator=(const Vector & v2)
     {
-      for (size_t i = 0; i < size_; i++)
-        data_[i] = v2(i);
+      for (size_t i = 0; i < size; i++)
+        data[i] = v2(i);
       return *this;
     }
 
     Vector & operator= (Vector && v2)
     {
-      for (size_t i = 0; i < size_; i++)
-        data_[i] = v2(i);
+      for (size_t i = 0; i < size; i++)
+        data[i] = v2(i);
       return *this;
     }
-    
   };
 
 
@@ -120,6 +118,5 @@ namespace ASC_bla
   }
   
 }
-
 
 #endif

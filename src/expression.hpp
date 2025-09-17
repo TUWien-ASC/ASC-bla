@@ -1,6 +1,5 @@
-#ifndef FILE_EXPRESSION_H
-#define FILE_EXPRESSION_H
-
+#ifndef FILE_EXPRESSION
+#define FILE_EXPRESSION
 
 namespace ASC_bla
 {
