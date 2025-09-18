@@ -40,8 +40,8 @@ namespace ASC_bla
 
     Vector & operator= (Vector && v2)
     {
-      for (size_t i = 0; i < size; i++)
-        data[i] = v2(i);
+      std::swap(size, v2.size);
+      std::swap(data, v2.data);
       return *this;
     }
     
