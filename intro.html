@@ -376,8 +376,8 @@ make
 <section id="using-asc-bla">
 <h2>Using ASC-bla<a class="headerlink" href="#using-asc-bla" title="Link to this heading">#</a></h2>
 <p>To use ASC-bla in your code, set the compiler include path properly, and include the header files</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#include &lt;vector.h&gt;
-#include &lt;matrix.h&gt;
+<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>#include &lt;vector.hpp&gt;
+#include &lt;matrix.hpp&gt;
 </pre></div>
 </div>
 <p>All objects are implemented in the namespace ASC_bla. To use them with less typing, you can set</p>
@@ -389,26 +389,26 @@ make
 </pre></div>
 </div>
 <p>You can create vectors and compute with vectors like:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Vector&lt;double&gt; x(5), y(5), z(5);
-for (int i = 0; i &lt; x.Size(); i++)
-   x(i) = i;
-y = 5.0
-z = x+3*y;
-cout &lt;&lt; &quot;z = &quot; &lt;&lt; z &lt;&lt; endl;
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Vector</span><span class="o">&lt;</span><span class="kt">double</span><span class="o">&gt;</span><span class="w"> </span><span class="n">x</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">y</span><span class="p">(</span><span class="mi">5</span><span class="p">),</span><span class="w"> </span><span class="n">z</span><span class="p">(</span><span class="mi">5</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">x</span><span class="p">.</span><span class="n">Size</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">   </span><span class="n">x</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="p">;</span>
+<span class="n">y</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">5.0</span>
+<span class="n">z</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">x</span><span class="o">+</span><span class="mi">3</span><span class="o">*</span><span class="n">y</span><span class="p">;</span>
+<span class="n">cout</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="s">&quot;z = &quot;</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">z</span><span class="w"> </span><span class="o">&lt;&lt;</span><span class="w"> </span><span class="n">endl</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>For matrices you can choose between row-major (<code class="docutils literal notranslate"><span class="pre">RowMajor</span></code>) or column-major (<code class="docutils literal notranslate"><span class="pre">ColMajor</span></code>) storage,
 default is row-major.</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Matrix&lt;double,RowMajor&gt; m1(5,3), m2(3,3);
-for (int i = 0; i &lt; m1.Height(); i++)
-  for (int j = 0; j &lt; m1.Width(); j++)
-    m1(i,j) = i+j;
-m2 = 3.7;
-Matrix product = m1 * m2;
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Matrix</span><span class="o">&lt;</span><span class="kt">double</span><span class="p">,</span><span class="n">RowMajor</span><span class="o">&gt;</span><span class="w"> </span><span class="n">m1</span><span class="p">(</span><span class="mi">5</span><span class="p">,</span><span class="mi">3</span><span class="p">),</span><span class="w"> </span><span class="n">m2</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span><span class="mi">3</span><span class="p">);</span>
+<span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">m1</span><span class="p">.</span><span class="n">Height</span><span class="p">();</span><span class="w"> </span><span class="n">i</span><span class="o">++</span><span class="p">)</span>
+<span class="w">  </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="kt">int</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span><span class="w"> </span><span class="n">j</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">m1</span><span class="p">.</span><span class="n">Width</span><span class="p">();</span><span class="w"> </span><span class="n">j</span><span class="o">++</span><span class="p">)</span>
+<span class="w">    </span><span class="n">m1</span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">j</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">i</span><span class="o">+</span><span class="n">j</span><span class="p">;</span>
+<span class="n">m2</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">3.7</span><span class="p">;</span>
+<span class="n">Matrix</span><span class="w"> </span><span class="n">product</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">m1</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">m2</span><span class="p">;</span>
 </pre></div>
 </div>
 <p>You can extract a row or a column from a matrix:</p>
-<div class="highlight-none notranslate"><div class="highlight"><pre><span></span>Vector col1 = product.Col(1);
+<div class="highlight-cpp notranslate"><div class="highlight"><pre><span></span><span class="n">Vector</span><span class="w"> </span><span class="n">col1</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">product</span><span class="p">.</span><span class="n">Col</span><span class="p">(</span><span class="mi">1</span><span class="p">);</span>
 </pre></div>
 </div>
 <p>some changes …</p>
